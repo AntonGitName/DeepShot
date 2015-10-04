@@ -12,9 +12,11 @@ import ru.spbau.mit.antonpp.deepshot.fragments.ImageChooseFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String IMAGE_URI = "IMAGE_URI";
     private final ImageLoader imageLoader = ImageLoader.getInstance();
     private ImageView mImageView;
     private ImageChooseFragment imageChooseFragment;
+    private String imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,26 @@ public class MainActivity extends AppCompatActivity {
                 imageChooseFragment.show(getFragmentManager(), ImageChooseFragment.TAG);
             }
         });
+
+        if (savedInstanceState != null) {
+            imageUri = savedInstanceState.getString(IMAGE_URI);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putString(IMAGE_URI, imageUri);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (imageUri != null) {
+            imageLoader.displayImage(imageUri, mImageView);
+        }
     }
 
     @Override
@@ -38,13 +60,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        final String uri;
         if (requestCode == ImageChooseFragment.PICK_FROM_CAMERA) {
-            uri = imageChooseFragment.getCameraImageUri().toString();
+            imageUri = imageChooseFragment.getCameraImageUri().toString();
         } else {
-            uri = data.getData().toString();
+            imageUri = data.getData().toString();
         }
 
-        imageLoader.displayImage(uri, mImageView);
+        imageLoader.displayImage(imageUri, mImageView);
     }
 }
