@@ -5,4 +5,5 @@
     <string name="image_choose_camera">From Camera</string>
     <string name="image_choose_sd">From SD Card</string>
     <string name="image_choose_button">Load Image</string>
+    <string name="dialog_choose_image">Select Image</string>
 </resources>
