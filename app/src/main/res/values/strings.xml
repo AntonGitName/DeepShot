@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">DeepShot</string>
     <string name="action_settings">Settings</string>
+    <string name="image_view">Chosen image</string>
+    <string name="image_choose_camera">From Camera</string>
+    <string name="image_choose_sd">From SD Card</string>
+    <string name="image_choose_button">Load Image</string>
 </resources>
