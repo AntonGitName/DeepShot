@@ -1,5 +1,6 @@
 package ru.spbau.mit.antonpp.deepshot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -57,6 +58,20 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuFragm
             case EXIT:
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        final String imageUri = data.getData().toString();
+
+        final CreatePaintingFragment fragment = (CreatePaintingFragment) getSupportFragmentManager().findFragmentByTag(CreatePaintingFragment.TAG);
+        if (fragment != null) {
+            fragment.onImageChosen(imageUri);
         }
     }
 }
