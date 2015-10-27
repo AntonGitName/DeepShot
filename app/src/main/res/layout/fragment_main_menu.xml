@@ -16,10 +16,10 @@
 
         <TextView
             android:id="@+id/main_menu_label"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:paddingTop="30dp"
+            android:paddingTop="5dp"
             android:text="@string/title_activity_main_menu"
             android:textColor="#add8e6"
             android:textSize="50sp" />
