@@ -43,7 +43,7 @@ public class FilterListLoader extends AsyncTaskLoader<List<FilterItem>> {
             for (int i = 0; i < n; ++i) {
                 final String filterName = jsonArray.getString(i);
 
-                String filterImageUri = null; // Util.getFilterUri(getContext(), filterName);
+                String filterImageUri = Util.getFilterUri(getContext(), filterName);
                 if (!Util.checkUriValid(filterImageUri)) {
                     URL url = new URL(Constants.URL_GET_FILTER + "?name=" + filterName);
 
