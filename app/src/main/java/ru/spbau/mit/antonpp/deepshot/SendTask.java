@@ -20,7 +20,7 @@ import java.io.ByteArrayOutputStream;
 public class SendTask extends AsyncTask<Void, Void, Void> {
 
     private static final String TAG = SendTask.class.getName();
-    private static final String POST_ADDRESS = "http://192.168.1.19:8080/task";
+    private static final String POST_ADDRESS = "http://192.168.67.17:8080/task";
 
     private final Bitmap imageToSend;
     private final Context context;

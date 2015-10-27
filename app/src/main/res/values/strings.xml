@@ -4,7 +4,17 @@
     <string name="image_view">Chosen image</string>
     <string name="image_choose_camera">From Camera</string>
     <string name="image_choose_sd">From SD Card</string>
-    <string name="image_choose_button">Load Image</string>
+    <string name="create_button">Create Painting</string>
     <string name="image_send_button">Send Image</string>
     <string name="dialog_choose_image">Select Image</string>
+    <string name="quit_button">Quit</string>
+    <string name="about_button">Help</string>
+    <string name="gallery_button">Your gallery</string>
+    <string name="title_activity_main_menu">Deep Shot</string>
+    <string name="create_label">Creating</string>
+    <string name="create_text">blah-blah-blah</string>
+    <string name="gallery_label">Gallery</string>
+    <string name="gallery_text">blah-blah-blahdi-blah</string>
+    <string name="about_label">SPBAU 2015</string>
+    <string name="about_text">the copyright</string>
 </resources>
