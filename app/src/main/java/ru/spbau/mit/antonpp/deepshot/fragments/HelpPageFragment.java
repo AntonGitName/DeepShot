@@ -18,7 +18,7 @@ import ru.spbau.mit.antonpp.deepshot.R;
  */
 public class HelpPageFragment extends Fragment {
 
-    public static final String TAG = "RulesPageFragment";
+    public static final String TAG = HelpPageFragment.class.getName();
 
     private static final int PAGE_STRINGS_RESOURCES_ID[] = {R.string.create_label, R.string.create_text,
             R.string.gallery_label, R.string.gallery_text, R.string.about_label, R.string.about_text};
@@ -41,7 +41,7 @@ public class HelpPageFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_help_page, container, false);
 
         final ViewPager pager = (ViewPager) rootView.findViewById(R.id.help_pager);
-        pager.setAdapter(new RulesPageAdapter(getFragmentManager()));
+        pager.setAdapter(new HelpPageAdapter(getFragmentManager()));
 
         return rootView;
     }
@@ -49,7 +49,7 @@ public class HelpPageFragment extends Fragment {
     public static final class PageFragment extends Fragment {
         static final String ARGUMENT_PAGE_NUMBER = "arg_page_number";
 
-        int mPageNumber;
+        private int pageNumber;
 
         static PageFragment newInstance(int page) {
             PageFragment pageFragment = new PageFragment();
@@ -62,7 +62,7 @@ public class HelpPageFragment extends Fragment {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            mPageNumber = getArguments().getInt(ARGUMENT_PAGE_NUMBER);
+            pageNumber = getArguments().getInt(ARGUMENT_PAGE_NUMBER);
         }
 
         @Override
@@ -70,18 +70,18 @@ public class HelpPageFragment extends Fragment {
             final View page = inflater.inflate(R.layout.layout_help_page, null);
 
             TextView textView = (TextView) page.findViewById(R.id.help_page_label);
-            textView.setText(PAGE_STRINGS_RESOURCES_ID[mPageNumber * 2]);
+            textView.setText(PAGE_STRINGS_RESOURCES_ID[pageNumber * 2]);
             textView.setTextSize(TEXT_SIZE);
             textView = (TextView) page.findViewById(R.id.help_page_text);
-            textView.setText(PAGE_STRINGS_RESOURCES_ID[mPageNumber * 2 + 1]);
+            textView.setText(PAGE_STRINGS_RESOURCES_ID[pageNumber * 2 + 1]);
             textView.setTextSize(TEXT_SIZE);
             return page;
         }
     }
 
-    private static final class RulesPageAdapter extends FragmentStatePagerAdapter {
+    private static final class HelpPageAdapter extends FragmentStatePagerAdapter {
 
-        public RulesPageAdapter(FragmentManager fm) {
+        public HelpPageAdapter(FragmentManager fm) {
             super(fm);
         }
 

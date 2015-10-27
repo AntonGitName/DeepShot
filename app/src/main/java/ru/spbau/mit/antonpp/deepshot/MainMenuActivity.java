@@ -1,28 +1,13 @@
 package ru.spbau.mit.antonpp.deepshot;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
-import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
+import ru.spbau.mit.antonpp.deepshot.fragments.CreatePaintingFragment;
 import ru.spbau.mit.antonpp.deepshot.fragments.HelpPageFragment;
-import ru.spbau.mit.antonpp.deepshot.fragments.ImageChooseFragment;
 import ru.spbau.mit.antonpp.deepshot.fragments.MainMenuFragment;
 
 public class MainMenuActivity extends AppCompatActivity implements MainMenuFragment.OnMainMenuOptionSelectedListener {
-
-    private static final String IMAGE_URI = "IMAGE_URI";
-
-    private final ImageLoader imageLoader = ImageLoader.getInstance();
-
-    private ImageView mImageView;
-    private Button sendButton;
-    private ImageChooseFragment imageChooseFragment;
-    private String imageUri;
-    private Bitmap imageToSend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +27,13 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuFragm
                 commit();
     }
 
+    private void onCreateButtonClicked() {
+        getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.fragment_container, CreatePaintingFragment.newInstance(), CreatePaintingFragment.TAG).
+                addToBackStack(MainMenuFragment.TAG).
+                commit();
+    }
 
     private void onHelpButtonClicked() {
         getSupportFragmentManager().
@@ -55,6 +47,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuFragm
     public void onMainMenuOptionSelected(MainMenuFragment.MainMenuOption option) {
         switch (option) {
             case CREATE:
+                onCreateButtonClicked();
                 break;
             case GALLERY:
                 break;
