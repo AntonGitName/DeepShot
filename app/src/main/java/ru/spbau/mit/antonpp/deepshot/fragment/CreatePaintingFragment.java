@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ru.spbau.mit.antonpp.deepshot.R;
-import ru.spbau.mit.antonpp.deepshot.network.SendImageTask;
+import ru.spbau.mit.antonpp.deepshot.async.SendImageTask;
 
 /**
  * @author antonpp

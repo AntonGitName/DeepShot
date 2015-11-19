@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +13,9 @@ import android.widget.GridView;
 
 import java.util.List;
 
-import ru.spbau.mit.antonpp.deepshot.MyApplication;
 import ru.spbau.mit.antonpp.deepshot.R;
 import ru.spbau.mit.antonpp.deepshot.adapter.GalleryViewAdapter;
-import ru.spbau.mit.antonpp.deepshot.loader.GalleryLoader;
+import ru.spbau.mit.antonpp.deepshot.async.GalleryLoader;
 import ru.spbau.mit.antonpp.deepshot.network.model.ResultItem;
 
 /**
@@ -65,15 +63,12 @@ public class GalleryFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public Loader<List<ResultItem>> onCreateLoader(int id, Bundle args) {
-        return new GalleryLoader(getActivity(), MyApplication.getUsername());
+        return new GalleryLoader(getActivity());
     }
 
     @Override
     public void onLoadFinished(Loader<List<ResultItem>> loader, List<ResultItem> data) {
-        if (data == null) {
-            Exception ex = ((GalleryLoader) loader).getException();
-            Log.e(TAG, ex.getMessage());
-        } else {
+        if (data != null) {
             adapter.setData(data);
         }
     }

@@ -1,25 +1,47 @@
 package ru.spbau.mit.antonpp.deepshot.network.model;
 
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * @author antonpp
  * @since 13/11/15
  */
 public class ResultItem {
-    private String name;
+
+    public final static String KEY_ID = "id";
+    public final static String KEY_STATUS = "status";
+    public final static String KEY_URI = "uri";
+    public final static String KEY_IMAGE = "encodedImage";
+    private static final String TAG = ResultItem.class.getName();
+    private long id;
+    private Status status;
     private String uri;
 
-    public ResultItem(String name, String uri) {
-        this.name = name;
-        this.uri = uri;
+    public static ResultItem fromJson(JSONObject jsonObject) throws JSONException {
+        ResultItem resultItem = new ResultItem();
+        resultItem.setId(jsonObject.getLong(KEY_ID));
+        resultItem.setStatus(Status.valueOf(jsonObject.getString(KEY_STATUS)));
+        resultItem.setUri(jsonObject.getString(KEY_URI));
+        return resultItem;
     }
 
-    public String getName() {
-
-        return name;
+    public long getId() {
+        return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public String getUri() {
@@ -28,5 +50,22 @@ public class ResultItem {
 
     public void setUri(String uri) {
         this.uri = uri;
+    }
+
+    public JSONObject toJsonObject() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(KEY_ID, id);
+            jsonObject.put(KEY_STATUS, status.toString());
+            jsonObject.put(KEY_URI, uri);
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Could not convert ResultItem to JSON");
+        }
+        return jsonObject;
+    }
+
+    public enum Status {
+        READY, PROCESSING, FAILED
     }
 }

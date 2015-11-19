@@ -30,7 +30,6 @@ public class MainMenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         final View rootView = inflater.inflate(R.layout.fragment_main_menu, container, false);
 
         rootView.findViewById(R.id.about_btn).setOnClickListener(new View.OnClickListener() {
@@ -61,6 +60,13 @@ public class MainMenuFragment extends Fragment {
             }
         });
 
+        rootView.findViewById(R.id.settings_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuOptionSelectedListener.onMainMenuOptionSelected(MainMenuOption.SETTINGS);
+            }
+        });
+
         return rootView;
     }
 
@@ -84,6 +90,7 @@ public class MainMenuFragment extends Fragment {
     public enum MainMenuOption {
         CREATE,
         GALLERY,
+        SETTINGS,
         HELP,
         EXIT
     }

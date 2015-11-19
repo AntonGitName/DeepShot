@@ -1,11 +1,13 @@
 package ru.spbau.mit.antonpp.deepshot.network;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,13 +20,14 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.spbau.mit.antonpp.deepshot.Constants;
+import ru.spbau.mit.antonpp.deepshot.network.model.ResultItem;
+import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
 
 /**
  * @author antonpp
@@ -51,25 +54,6 @@ public class Util {
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
-    public static String getJSONStringFromUrl(String url) {
-        HttpURLConnection httpURLConnection = null;
-        String jsonString = null;
-
-        try {
-            final URL u = new URL(url);
-            httpURLConnection = (HttpURLConnection) u.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            jsonString = getResponse(httpURLConnection);
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage());
-        } finally {
-            if (httpURLConnection != null) {
-                httpURLConnection.disconnect();
-            }
-        }
-        return jsonString;
-    }
-
     public static String getResponse(HttpURLConnection httpURLConnection) {
         final StringBuilder stringBuilder = new StringBuilder();
         BufferedReader bufferedReader = null;
@@ -90,18 +74,7 @@ public class Util {
                 Log.e(TAG, ex.getMessage());
             }
         }
-        Log.d("RESPONSE", stringBuilder.toString());
         return stringBuilder.toString();
-    }
-
-    public static String getImageUri(Context context, ImageType type, long id) {
-        final SharedPreferences sp = context.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
-        return sp.getString(createFilename(type, id), null);
-    }
-
-    public static void saveImageUri(Context context, ImageType type, long id, String uri) {
-        final SharedPreferences sp = context.getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
-        sp.edit().putString(createFilename(type, id), uri).apply();
     }
 
     public static String createFilename(ImageType type, long id) {
@@ -122,12 +95,33 @@ public class Util {
         return "file://" + context.getFilesDir().getPath() + File.separator + filename;
     }
 
-    public static boolean checkUriValid(String uri) {
+    public static String sendGET(String getUrl, String key, String value) throws IOException, JSONException {
+        List<NameValuePair> params = new ArrayList<>(1);
+        params.add(new NameValuePair(key, value));
+        return sendGET(getUrl, params);
+    }
+
+    public static String sendGET(String getUrl) throws IOException, JSONException {
+        return sendGET(getUrl, new ArrayList<NameValuePair>());
+    }
+
+    private static String sendGET(String getUrl, List<NameValuePair> params) throws IOException, JSONException {
+        HttpURLConnection connection = null;
+        String result = null;
         try {
-            return uri != null && new File(URI.create(uri).getPath()).exists();
-        } catch (IllegalArgumentException e) {
-            return false;
+            final URL url = new URL(getUrl + getGETQuery(params));
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.setRequestMethod("GET");
+            result = Util.getResponse(connection);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage());
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
+        return result;
     }
 
     private static String sendPOST(String url, List<NameValuePair> params) {
@@ -146,7 +140,7 @@ public class Util {
             final OutputStream os = httpURLConnection.getOutputStream();
             final BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, "UTF-8"));
-            writer.write(getQuery(params));
+            writer.write(getPOSTQuery(params));
             writer.flush();
             writer.close();
             os.close();
@@ -168,7 +162,7 @@ public class Util {
         addParam(params, "username", username);
         addParam(params, "encodedImage", encodedImage);
         addParam(params, "styleId", styleId);
-        sendPOST(Constants.URL_POST_IMAGE, params);
+        sendPOST(NetworkConfiguration.URL_POST_IMAGE, params);
     }
 
     private static void addParam(List<NameValuePair> params, String key, Object value) {
@@ -177,7 +171,27 @@ public class Util {
         }
     }
 
-    private static String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
+    private static String getGETQuery(List<NameValuePair> params) {
+        final StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        for (NameValuePair pair : params) {
+            if (first) {
+                first = false;
+                result.append("?");
+            } else {
+                result.append("&");
+            }
+
+            result.append(pair.getName());
+            result.append("=");
+            result.append(pair.getValue());
+        }
+
+        return result.toString();
+    }
+
+    private static String getPOSTQuery(List<NameValuePair> params) throws UnsupportedEncodingException {
         final StringBuilder result = new StringBuilder();
         boolean first = true;
 
@@ -194,6 +208,28 @@ public class Util {
         }
 
         return result.toString();
+    }
+
+    public static StyleItem getStyle(Context context, long id) throws IOException, JSONException {
+        final JSONObject jsonObject = new JSONObject(Util.sendGET(NetworkConfiguration.URL_GET_FILTER, "id", "" + id));
+        StyleItem item = new StyleItem();
+        item.setId(id);
+        item.setName(jsonObject.getString(StyleItem.KEY_NAME));
+        item.setUri(saveImage(ImageType.STYLE, context, id, jsonObject.getString(StyleItem.KEY_IMAGE)));
+        return item;
+    }
+
+    public static ResultItem getResult(Context context, long id) throws IOException, JSONException {
+        final JSONObject jsonObject = new JSONObject(Util.sendGET(NetworkConfiguration.URL_GET_RESULT, "id", "" + id));
+        ResultItem item = new ResultItem();
+        item.setId(id);
+        item.setStatus(ResultItem.Status.valueOf(jsonObject.getString(ResultItem.KEY_STATUS)));
+        if (item.getStatus() == ResultItem.Status.READY) {
+            item.setUri(saveImage(ImageType.RESULT, context, id, jsonObject.getString(ResultItem.KEY_IMAGE)));
+        } else {
+            item.setUri(Constants.STUB_IMAGE_URI);
+        }
+        return item;
     }
 
     public enum ImageType {

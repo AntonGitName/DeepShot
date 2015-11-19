@@ -8,6 +8,7 @@ import ru.spbau.mit.antonpp.deepshot.fragment.CreatePaintingFragment;
 import ru.spbau.mit.antonpp.deepshot.fragment.GalleryFragment;
 import ru.spbau.mit.antonpp.deepshot.fragment.HelpPageFragment;
 import ru.spbau.mit.antonpp.deepshot.fragment.MainMenuFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.SettingsFragment;
 import ru.spbau.mit.antonpp.deepshot.fragment.ViewResultFragment;
 
 public class MainMenuActivity extends AppCompatActivity
@@ -65,6 +66,9 @@ public class MainMenuActivity extends AppCompatActivity
             case GALLERY:
                 onGalleryButtonClicked();
                 break;
+            case SETTINGS:
+                onSettingsButtonClicked();
+                break;
             case HELP:
                 onHelpButtonClicked();
                 break;
@@ -72,6 +76,14 @@ public class MainMenuActivity extends AppCompatActivity
                 finish();
                 break;
         }
+    }
+
+    private void onSettingsButtonClicked() {
+        getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.fragment_container, SettingsFragment.newInstance(), SettingsFragment.TAG).
+                addToBackStack(MainMenuFragment.TAG).
+                commit();
     }
 
     public void onStyleChosen(long styleId) {
@@ -93,6 +105,12 @@ public class MainMenuActivity extends AppCompatActivity
         if (fragment != null) {
             fragment.onImageChosen(imageUri);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        MainApplication.getDataWrapper().saveState();
+        super.onDestroy();
     }
 
     @Override

@@ -25,4 +25,10 @@
     <string name="create_choose2_button">Choose filter</string>
     <string name="chosen_image">chosen image</string>
     <string name="filter_list_header">Available filters</string>
+    <string name="settings_button">Settings</string>
+    <string name="current_ip_text">Current server IP:</string>
+    <string name="btn_clear_cache">Clear cache</string>
+    <string name="username">Current user:</string>
+    <string name="change_server_text">Change server IP:</string>
+    <string name="btn_set_server">change</string>
 </resources>

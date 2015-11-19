@@ -8,16 +8,18 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import ru.spbau.mit.antonpp.deepshot.network.DataWrapper;
+
 /**
  * @author antonpp
  * @since 04/10/15
  */
-public class MyApplication extends Application {
+public class MainApplication extends Application {
 
-    private static String username;
+    private static DataWrapper dataWrapper;
 
-    public static String getUsername() {
-        return username;
+    public static DataWrapper getDataWrapper() {
+        return dataWrapper;
     }
 
     @Override
@@ -26,11 +28,14 @@ public class MyApplication extends Application {
 
         final Account[] accounts = AccountManager.get(getApplicationContext()).
                 getAccountsByType("com.google");
+        final String username;
         if (accounts.length != 0) {
             username = accounts[0].name;
         } else {
             username = "emulator";
         }
+
+        dataWrapper = DataWrapper.getInstance(getApplicationContext(), username);
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)

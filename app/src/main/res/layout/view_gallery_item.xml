@@ -12,7 +12,15 @@
         android:layout_height="100dp" />
 
     <TextView
-        android:id="@+id/gallery_text_item"
+        android:id="@+id/gallery_text_id"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/gallery_text_status"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"

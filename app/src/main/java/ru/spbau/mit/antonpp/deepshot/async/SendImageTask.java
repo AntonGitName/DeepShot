@@ -1,11 +1,8 @@
-package ru.spbau.mit.antonpp.deepshot.network;
+package ru.spbau.mit.antonpp.deepshot.async;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import ru.spbau.mit.antonpp.deepshot.MyApplication;
+import ru.spbau.mit.antonpp.deepshot.MainApplication;
 
 /**
  * @author antonpp
@@ -14,8 +11,6 @@ import ru.spbau.mit.antonpp.deepshot.MyApplication;
 public class SendImageTask extends AsyncTask<Void, Void, Void> {
 
     private static final String TAG = SendImageTask.class.getName();
-
-    private final ImageLoader imageLoader = ImageLoader.getInstance();
 
     private final String imageUrl;
     private final long styleId;
@@ -28,9 +23,7 @@ public class SendImageTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
-        Bitmap image = imageLoader.loadImageSync(imageUrl);
-        String encodedImage = Util.encodeImage(image);
-        Util.sendImage(MyApplication.getUsername(), encodedImage, styleId);
+        MainApplication.getDataWrapper().sendImage(imageUrl, styleId);
         return null;
     }
 }

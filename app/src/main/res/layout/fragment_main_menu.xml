@@ -50,6 +50,13 @@
         <TableRow android:gravity="center">
 
             <Button
+                android:id="@+id/settings_btn"
+                android:text="@string/settings_button" />
+        </TableRow>
+
+        <TableRow android:gravity="center">
+
+            <Button
                 android:id="@+id/about_btn"
                 android:text="@string/about_button" />
         </TableRow>

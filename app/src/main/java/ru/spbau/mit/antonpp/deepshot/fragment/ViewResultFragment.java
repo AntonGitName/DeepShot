@@ -21,8 +21,6 @@ public class ViewResultFragment extends Fragment {
     private static final String IMAGE_URL = "IMAGE_URL";
     private static final ImageLoader IMAGE_LOADER = ImageLoader.getInstance();
 
-    private ImageView imageView;
-
     public ViewResultFragment() {
         // Required empty public constructor
     }
