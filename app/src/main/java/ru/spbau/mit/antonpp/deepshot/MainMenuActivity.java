@@ -4,11 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import ru.spbau.mit.antonpp.deepshot.fragments.CreatePaintingFragment;
-import ru.spbau.mit.antonpp.deepshot.fragments.HelpPageFragment;
-import ru.spbau.mit.antonpp.deepshot.fragments.MainMenuFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.CreatePaintingFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.GalleryFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.HelpPageFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.MainMenuFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.ViewResultFragment;
 
-public class MainMenuActivity extends AppCompatActivity implements MainMenuFragment.OnMainMenuOptionSelectedListener {
+public class MainMenuActivity extends AppCompatActivity
+        implements MainMenuFragment.OnMainMenuOptionSelectedListener,
+        GalleryFragment.OnResultImageClickedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,14 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuFragm
                 commit();
     }
 
+    private void onGalleryButtonClicked() {
+        getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.fragment_container, GalleryFragment.newInstance(), GalleryFragment.TAG).
+                addToBackStack(MainMenuFragment.TAG).
+                commit();
+    }
+
     @Override
     public void onMainMenuOptionSelected(MainMenuFragment.MainMenuOption option) {
         switch (option) {
@@ -51,6 +63,7 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuFragm
                 onCreateButtonClicked();
                 break;
             case GALLERY:
+                onGalleryButtonClicked();
                 break;
             case HELP:
                 onHelpButtonClicked();
@@ -58,6 +71,13 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuFragm
             case EXIT:
                 finish();
                 break;
+        }
+    }
+
+    public void onStyleChosen(long styleId) {
+        final CreatePaintingFragment fragment = (CreatePaintingFragment) getSupportFragmentManager().findFragmentByTag(CreatePaintingFragment.TAG);
+        if (fragment != null) {
+            fragment.onStyleChosen(styleId);
         }
     }
 
@@ -73,5 +93,14 @@ public class MainMenuActivity extends AppCompatActivity implements MainMenuFragm
         if (fragment != null) {
             fragment.onImageChosen(imageUri);
         }
+    }
+
+    @Override
+    public void onResultImageClicked(String imageUrl) {
+        getSupportFragmentManager().
+                beginTransaction().
+                replace(R.id.fragment_container, ViewResultFragment.newInstance(imageUrl), ViewResultFragment.TAG).
+                addToBackStack(GalleryFragment.TAG).
+                commit();
     }
 }

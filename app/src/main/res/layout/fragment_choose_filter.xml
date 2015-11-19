@@ -40,7 +40,7 @@
 
         <fragment
             android:id="@+id/create_filter_view"
-            class="ru.spbau.mit.antonpp.deepshot.fragments.FilterListFragment"
+            class="ru.spbau.mit.antonpp.deepshot.fragment.StyleListFragment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />

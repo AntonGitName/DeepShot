@@ -1,4 +1,4 @@
-package ru.spbau.mit.antonpp.deepshot.fragments;
+package ru.spbau.mit.antonpp.deepshot.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;

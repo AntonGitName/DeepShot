@@ -1,4 +1,4 @@
-package ru.spbau.mit.antonpp.deepshot.fragments;
+package ru.spbau.mit.antonpp.deepshot.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

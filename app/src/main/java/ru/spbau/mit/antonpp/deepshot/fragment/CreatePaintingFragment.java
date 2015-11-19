@@ -1,4 +1,4 @@
-package ru.spbau.mit.antonpp.deepshot.fragments;
+package ru.spbau.mit.antonpp.deepshot.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ru.spbau.mit.antonpp.deepshot.R;
+import ru.spbau.mit.antonpp.deepshot.network.SendImageTask;
 
 /**
  * @author antonpp
@@ -26,6 +27,7 @@ public class CreatePaintingFragment extends Fragment {
     private String imageUri;
     private Button nextButton;
     private Button prevButton;
+    private long styleId;
 
     public CreatePaintingFragment() {
         // Required empty public constructor
@@ -35,10 +37,20 @@ public class CreatePaintingFragment extends Fragment {
         return new CreatePaintingFragment();
     }
 
+    private void onSend() {
+        new SendImageTask(imageUri, styleId).execute();
+        getFragmentManager().popBackStack();
+    }
+
     public void onImageChosen(String uri) {
         imageUri = uri;
         nextButton.setEnabled(pager.getCurrentItem() == 0);
         chooseImageFragment.setImage(uri);
+    }
+
+    public void onStyleChosen(long id) {
+        styleId = id;
+        nextButton.setEnabled(true);
     }
 
     @Override
@@ -75,7 +87,11 @@ public class CreatePaintingFragment extends Fragment {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pager.setCurrentItem(1);
+                if (pager.getCurrentItem() == 0) {
+                    pager.setCurrentItem(1);
+                } else {
+                    onSend();
+                }
             }
         });
 

@@ -15,7 +15,7 @@ import com.koushikdutta.ion.Ion;
  */
 public class GetFilterTask extends AsyncTask<Void, Void, Void> {
 
-    private static final String TAG = PostImageTask.class.getName();
+    private static final String TAG = SendImageTask.class.getName();
     private static final String GET_ADDRESS = "http://192.168.67.17:8080/filter";
 
     private final String filterName;

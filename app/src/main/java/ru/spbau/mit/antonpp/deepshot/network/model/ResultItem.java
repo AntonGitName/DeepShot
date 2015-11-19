@@ -1,14 +1,14 @@
-package ru.spbau.mit.antonpp.deepshot.network;
+package ru.spbau.mit.antonpp.deepshot.network.model;
 
 /**
  * @author antonpp
- * @since 27/10/15
+ * @since 13/11/15
  */
-public class FilterItem {
+public class ResultItem {
     private String name;
     private String uri;
 
-    public FilterItem(String name, String uri) {
+    public ResultItem(String name, String uri) {
         this.name = name;
         this.uri = uri;
     }

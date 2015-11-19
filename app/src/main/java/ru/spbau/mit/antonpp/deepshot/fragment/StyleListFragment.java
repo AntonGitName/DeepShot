@@ -1,4 +1,4 @@
-package ru.spbau.mit.antonpp.deepshot.fragments;
+package ru.spbau.mit.antonpp.deepshot.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -18,15 +19,16 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.List;
 
+import ru.spbau.mit.antonpp.deepshot.MainMenuActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
-import ru.spbau.mit.antonpp.deepshot.network.FilterItem;
-import ru.spbau.mit.antonpp.deepshot.network.FilterListLoader;
+import ru.spbau.mit.antonpp.deepshot.loader.StyleListLoader;
+import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
 
 /**
  * @author antonpp
  * @since 27/10/15
  */
-public class FilterListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<FilterItem>> {
+public class StyleListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<StyleItem>> {
 
     private static final ImageLoader IMAGE_LOADER = ImageLoader.getInstance();
     private static final int MAX_HEIGHT = 200;
@@ -50,21 +52,27 @@ public class FilterListFragment extends ListFragment implements LoaderManager.Lo
     }
 
     @Override
-    public Loader<List<FilterItem>> onCreateLoader(int id, Bundle args) {
-        return new FilterListLoader(getActivity());
+    public Loader<List<StyleItem>> onCreateLoader(int id, Bundle args) {
+        return new StyleListLoader(getActivity());
     }
 
     @Override
-    public void onLoadFinished(Loader<List<FilterItem>> loader, List<FilterItem> data) {
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        ((MainMenuActivity) getActivity()).onStyleChosen(adapter.getItem(position).getId());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<StyleItem>> loader, List<StyleItem> data) {
         if (isResumed()) {
             setListShown(true);
         } else {
             setListShownNoAnimation(true);
         }
         if (data == null || data.isEmpty()) {
-            Exception ex = ((FilterListLoader) loader).getException();
+            Exception ex = ((StyleListLoader) loader).getException();
             if (ex != null) {
-                setEmptyText(((FilterListLoader) loader).getException().getMessage());
+                setEmptyText(((StyleListLoader) loader).getException().getMessage());
             } else {
                 setDefaultEmptyText();
             }
@@ -74,11 +82,11 @@ public class FilterListFragment extends ListFragment implements LoaderManager.Lo
     }
 
     @Override
-    public void onLoaderReset(Loader<List<FilterItem>> loader) {
+    public void onLoaderReset(Loader<List<StyleItem>> loader) {
         adapter.setData(null);
     }
 
-    public static class FilterListAdapter extends ArrayAdapter<FilterItem> {
+    public static class FilterListAdapter extends ArrayAdapter<StyleItem> {
 
         private static final int LAYOUT_RESOURCE_ID = R.layout.listview_item_row;
         private static final DisplayImageOptions DISPLAY_IMAGE_OPTIONS =
@@ -91,7 +99,7 @@ public class FilterListFragment extends ListFragment implements LoaderManager.Lo
             inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
-        public void setData(List<FilterItem> data) {
+        public void setData(List<StyleItem> data) {
             clear();
             if (data != null) {
                 addAll(data);
@@ -114,7 +122,7 @@ public class FilterListFragment extends ListFragment implements LoaderManager.Lo
                 holder = (ListItemHolder) row.getTag();
             }
 
-            final FilterItem item = getItem(position);
+            final StyleItem item = getItem(position);
             holder.getTxtTitle().setText(item.getName());
             IMAGE_LOADER.displayImage(item.getUri(), holder.getImgIcon(), DISPLAY_IMAGE_OPTIONS);
 
