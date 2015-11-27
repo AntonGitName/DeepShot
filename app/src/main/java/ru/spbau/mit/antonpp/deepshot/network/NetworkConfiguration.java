@@ -1,12 +1,15 @@
 package ru.spbau.mit.antonpp.deepshot.network;
 
+import android.util.Log;
+
 /**
  * @author antonpp
  * @since 20/11/15
  */
 public class NetworkConfiguration {
-    private final static String DEFAULT_IP = "192.168.1.19";
 
+    public final static String DEFAULT_IP = "192.168.65.4";
+    private static final String TAG = NetworkConfiguration.class.getName();
     public static String SERVER_IP;
     public static String SERVER_ADDRESS;
 
@@ -23,6 +26,9 @@ public class NetworkConfiguration {
     }
 
     public static void resetIp(String ip) {
+
+        Log.d(TAG, String.format("new ip:[%s]", ip));
+
         SERVER_IP = ip;
         SERVER_ADDRESS = "http://" + SERVER_IP + ":8080";
 

@@ -1,7 +1,5 @@
 package ru.spbau.mit.antonpp.deepshot;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Application;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -16,6 +14,8 @@ import ru.spbau.mit.antonpp.deepshot.network.DataWrapper;
  */
 public class MainApplication extends Application {
 
+    private static final String KEY_USERNAME = "KEY_USERNAME";
+    private static final String DEFAULT_USERNAME = "TEST_USERNAME";
     private static DataWrapper dataWrapper;
 
     public static DataWrapper getDataWrapper() {
@@ -26,16 +26,7 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        final Account[] accounts = AccountManager.get(getApplicationContext()).
-                getAccountsByType("com.google");
-        final String username;
-        if (accounts.length != 0) {
-            username = accounts[0].name;
-        } else {
-            username = "emulator";
-        }
-
-        dataWrapper = DataWrapper.getInstance(getApplicationContext(), username);
+        dataWrapper = DataWrapper.getInstance(getApplicationContext(), DEFAULT_USERNAME);
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)

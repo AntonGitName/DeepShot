@@ -157,11 +157,12 @@ public class Util {
         return result;
     }
 
-    public static void sendImage(String username, String encodedImage, long styleId) {
+    public static void sendImage(String username, String encodedImage, long styleId, String gcmRegistrationId) {
         List<NameValuePair> params = new ArrayList<>();
         addParam(params, "username", username);
         addParam(params, "encodedImage", encodedImage);
         addParam(params, "styleId", styleId);
+        addParam(params, "gcmToken", gcmRegistrationId);
         sendPOST(NetworkConfiguration.URL_POST_IMAGE, params);
     }
 

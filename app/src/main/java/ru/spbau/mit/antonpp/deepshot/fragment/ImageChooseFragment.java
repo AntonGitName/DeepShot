@@ -14,14 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import ru.spbau.mit.antonpp.deepshot.MainMenuActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
 
 public class ImageChooseFragment extends DialogFragment {
 
     public static final String TAG = ImageChooseFragment.class.getName();
-
-    public static final int PICK_FROM_CAMERA = 1;
-    public static final int PICK_FROM_FILE = 2;
 
     public ImageChooseFragment() {
         // Required empty public constructor
@@ -35,8 +33,8 @@ public class ImageChooseFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Resources resources = getResources();
         final String[] items = new String[]{
-                resources.getString(R.string.image_choose_camera)
-                , resources.getString(R.string.image_choose_sd)};
+                resources.getString(R.string.image_choose_camera),
+                resources.getString(R.string.image_choose_sd)};
 
         final Activity activity = getActivity();
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.select_dialog_item, items);
@@ -49,7 +47,7 @@ public class ImageChooseFragment extends DialogFragment {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     // Ensure that there's a camera activity to handle the intent
                     if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                        activity.startActivityForResult(takePictureIntent, PICK_FROM_CAMERA);
+                        activity.startActivityForResult(takePictureIntent, MainMenuActivity.PICK_FROM_CAMERA);
                     }
                 } else {
                     Intent intent = new Intent();
@@ -57,7 +55,7 @@ public class ImageChooseFragment extends DialogFragment {
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
 
-                    activity.startActivityForResult(Intent.createChooser(intent, "Complete action using"), PICK_FROM_FILE);
+                    activity.startActivityForResult(Intent.createChooser(intent, "Complete action using"), MainMenuActivity.PICK_FROM_FILE);
                 }
             }
         });

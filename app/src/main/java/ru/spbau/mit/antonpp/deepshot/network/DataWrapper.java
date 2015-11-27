@@ -31,18 +31,18 @@ import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
 public class DataWrapper {
 
     private static final String TAG = DataWrapper.class.getName();
+
     private final static String KEY_RESULTS = "KEY_RESULTS";
     private final static String KEY_STYLES = "KEY_STYLES";
 
     private static DataWrapper instance;
 
     private final ImageLoader imageLoader = ImageLoader.getInstance();
-
     private final Context context;
-    private final String username;
+    private String username;
+    private String gcmRegistrationId;
     private List<ResultItem> resultItems;
     private List<StyleItem> styleItems;
-
     private DataWrapper(Context context, String username) {
         this.context = context;
         this.username = username;
@@ -60,6 +60,11 @@ public class DataWrapper {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    // TODO
     public List<ResultItem> getResultItems() {
         return new ArrayList<>(resultItems);
     }
@@ -156,7 +161,7 @@ public class DataWrapper {
 
         try {
             rootJson.put(KEY_RESULTS, jsonArrayResults);
-            rootJson.put(KEY_STYLES, jsonArrayResults);
+            rootJson.put(KEY_STYLES, jsonArrayStyles);
         } catch (JSONException e) {
             Log.e(TAG, "Failed to save cache!");
         }
@@ -242,10 +247,14 @@ public class DataWrapper {
         }
     }
 
+    public void setGcmRegistrationId(String gcmRegistrationId) {
+        this.gcmRegistrationId = gcmRegistrationId;
+    }
+
     public void sendImage(String imageUrl, long styleId) {
         Bitmap image = imageLoader.loadImageSync(imageUrl);
         String encodedImage = Util.encodeImage(image);
-        Util.sendImage(username, encodedImage, styleId);
+        Util.sendImage(username, encodedImage, styleId, gcmRegistrationId);
     }
 
     public void clearCache() {

@@ -1,5 +1,6 @@
 package ru.spbau.mit.antonpp.deepshot.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.common.AccountPicker;
+
 import ru.spbau.mit.antonpp.deepshot.MainApplication;
+import ru.spbau.mit.antonpp.deepshot.MainMenuActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
 import ru.spbau.mit.antonpp.deepshot.network.NetworkConfiguration;
 
@@ -22,6 +26,7 @@ public class SettingsFragment extends Fragment {
 
     private EditText editText;
     private TextView serverIp;
+    private TextView username;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -44,18 +49,40 @@ public class SettingsFragment extends Fragment {
 
         editText = (EditText) rootView.findViewById(R.id.server_ip_edittext);
         serverIp = (TextView) rootView.findViewById(R.id.text_server);
-        ((TextView) rootView.findViewById(R.id.text_username)).setText(MainApplication.getDataWrapper().getUsername());
-        serverIp.setText(NetworkConfiguration.SERVER_IP);
+        username = (TextView) rootView.findViewById(R.id.text_username);
+
+        updateUsername();
+        updateServerIp();
 
         rootView.findViewById(R.id.btn_set_server).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String newIP = editText.getText().toString();
-                serverIp.setText(newIP);
                 MainApplication.getDataWrapper().clearCache();
                 NetworkConfiguration.resetIp(newIP);
+                updateServerIp();
             }
         });
+
+        rootView.findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                        false, null, null, null, null);
+                getActivity().startActivityForResult(intent, MainMenuActivity.SIGN_INTENT_RETURN_CODE);
+
+            }
+        });
+
         return rootView;
+    }
+
+    public void updateUsername() {
+        this.username.setText(MainApplication.getDataWrapper().getUsername());
+    }
+
+    public void updateServerIp() {
+        serverIp.setText(NetworkConfiguration.SERVER_IP);
     }
 }
