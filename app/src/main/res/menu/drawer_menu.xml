@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/navigation_gallery"
+            android:checkable="true"
+            android:icon="@android:drawable/ic_menu_gallery"
+            android:title="@string/gallery_button" />
+        <item
+            android:id="@+id/navigation_create"
+            android:checkable="true"
+            android:icon="@drawable/painting"
+            android:title="@string/create_button" />
+        <item
+            android:id="@+id/navigation_settings"
+            android:checkable="true"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="@string/settings_button" />
+        <item
+            android:id="@+id/navigation_synchronize"
+            android:checkable="true"
+            android:icon="@drawable/sync"
+            android:title="@string/synchronize_button" />
+    </group>
+
+</menu>

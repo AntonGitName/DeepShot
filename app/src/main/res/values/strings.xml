@@ -29,6 +29,9 @@
     <string name="current_ip_text">Current server IP:</string>
     <string name="btn_clear_cache">Clear cache</string>
     <string name="username">Current user:</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="navigation_drawer_close">close</string>
     <string name="change_server_text">Change server IP:</string>
     <string name="btn_set_server">change</string>
+    <string name="synchronize_button">Synchronize</string>
 </resources>

@@ -228,7 +228,7 @@ public class Util {
         if (item.getStatus() == ResultItem.Status.READY) {
             item.setUri(saveImage(ImageType.RESULT, context, id, jsonObject.getString(ResultItem.KEY_IMAGE)));
         } else {
-            item.setUri(Constants.STUB_IMAGE_URI);
+            item.setUri(Constants.STUB_IMAGE);
         }
         return item;
     }

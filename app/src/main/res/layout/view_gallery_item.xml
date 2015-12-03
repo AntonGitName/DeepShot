@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:padding="5dp">
 
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gallery_image_item"
         android:layout_width="100dp"
         android:layout_height="100dp" />

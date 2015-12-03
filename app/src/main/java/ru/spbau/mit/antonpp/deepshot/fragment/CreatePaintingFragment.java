@@ -21,7 +21,7 @@ public class CreatePaintingFragment extends Fragment {
 
     public static final String TAG = CreatePaintingFragment.class.getName();
 
-    private ChooseFilterFragment chooseFilterFragment;
+    private ChooseStyleFragment chooseStyleFragment;
     private ChooseImageFragment chooseImageFragment;
     private ViewPager pager;
     private String imageUri;
@@ -60,13 +60,13 @@ public class CreatePaintingFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_create, container, false);
 
         chooseImageFragment = ChooseImageFragment.newInstance();
-        chooseFilterFragment = ChooseFilterFragment.newInstance();
+        chooseStyleFragment = ChooseStyleFragment.newInstance();
 
         nextButton = (Button) rootView.findViewById(R.id.create_next_button);
         prevButton = (Button) rootView.findViewById(R.id.create_prev_button);
 
         pager = (ViewPager) rootView.findViewById(R.id.create_pager);
-        pager.setAdapter(new CreatePaintingPageAdapter(getFragmentManager(), new Fragment[]{chooseImageFragment, chooseFilterFragment}));
+        pager.setAdapter(new CreatePaintingPageAdapter(getFragmentManager(), new Fragment[]{chooseImageFragment, chooseStyleFragment}));
         pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override

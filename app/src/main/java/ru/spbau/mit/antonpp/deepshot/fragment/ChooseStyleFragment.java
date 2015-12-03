@@ -12,23 +12,22 @@ import ru.spbau.mit.antonpp.deepshot.R;
  * @author antonpp
  * @since 27/10/15
  */
-public class ChooseFilterFragment extends Fragment {
+public class ChooseStyleFragment extends Fragment {
 
-    public static final String TAG = ChooseFilterFragment.class.getName();
+    public static final String TAG = ChooseStyleFragment.class.getName();
 
-    public ChooseFilterFragment() {
+    public ChooseStyleFragment() {
         // Required empty public constructor
     }
 
-    public static ChooseFilterFragment newInstance() {
-        return new ChooseFilterFragment();
+    public static ChooseStyleFragment newInstance() {
+        return new ChooseStyleFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View rootView = inflater.inflate(R.layout.fragment_choose_filter, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.fragment_choose_filter, container, false);
     }
 }

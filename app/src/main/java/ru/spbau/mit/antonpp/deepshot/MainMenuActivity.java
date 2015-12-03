@@ -8,9 +8,15 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -27,18 +33,23 @@ import ru.spbau.mit.antonpp.deepshot.service.RegistrationIntentService;
 public class MainMenuActivity
         extends AppCompatActivity
         implements MainMenuFragment.OnMainMenuOptionSelectedListener,
-        GalleryFragment.OnResultImageClickedListener {
+        GalleryFragment.OnResultImageClickedListener, NavigationView.OnNavigationItemSelectedListener {
 
-    public final static String IP_KEY = "IP_KEY";
+    public final static String KEY_IP = "KEY_IP";
     public static final int PICK_FROM_CAMERA = 1;
     public static final int PICK_FROM_FILE = 2;
     public static final int SIGN_INTENT_RETURN_CODE = 3;
     private static final String TAG = MainMenuActivity.class.getName();
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String KEY_USERNAME = "KEY_USERNAME";
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
     private static final String DEFAULT_USERNAME = "TEST_USERNAME";
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+    private Toolbar toolbar;
+    private ActionBarDrawerToggle toggle;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +61,18 @@ public class MainMenuActivity
             startFragment();
         }
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -57,6 +80,7 @@ public class MainMenuActivity
                         PreferenceManager.getDefaultSharedPreferences(context);
                 boolean sentToken = sharedPreferences
                         .getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
+
             }
         };
 
@@ -70,7 +94,7 @@ public class MainMenuActivity
     private void startFragment() {
         getSupportFragmentManager().
                 beginTransaction().
-                replace(R.id.fragment_container, MainMenuFragment.newInstance(), MainMenuFragment.TAG).
+                replace(R.id.fragment_container, SettingsFragment.newInstance(), SettingsFragment.TAG).
                 commit();
     }
 
@@ -205,13 +229,13 @@ public class MainMenuActivity
 
     private String getLastIp() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(IP_KEY, NetworkConfiguration.DEFAULT_IP);
+        return preferences.getString(KEY_IP, NetworkConfiguration.DEFAULT_IP);
     }
 
     private void saveLastIp() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.edit().
-                putString(IP_KEY, NetworkConfiguration.SERVER_IP).
+                putString(KEY_IP, NetworkConfiguration.SERVER_IP).
                 apply();
     }
 
@@ -246,6 +270,34 @@ public class MainMenuActivity
             }
             return false;
         }
+        return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+        item.setChecked(false);
+
+        switch (id) {
+            case R.id.navigation_gallery:
+                onGalleryButtonClicked();
+                break;
+            case R.id.navigation_create:
+                onCreateButtonClicked();
+                break;
+            case R.id.navigation_settings:
+                onSettingsButtonClicked();
+                break;
+            case R.id.navigation_synchronize:
+                break;
+            default:
+                return true;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 }

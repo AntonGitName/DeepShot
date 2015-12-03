@@ -5,10 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import pl.droidsonroids.gif.GifImageView;
+import ru.spbau.mit.antonpp.deepshot.Constants;
 import ru.spbau.mit.antonpp.deepshot.R;
 
 /**
@@ -38,7 +39,13 @@ public class ViewResultFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_result_image, container, false);
 
-        IMAGE_LOADER.displayImage(getArguments().getString(IMAGE_URL), (ImageView) rootView.findViewById(R.id.result_image_view));
+        final GifImageView imageView = (GifImageView) rootView.findViewById(R.id.result_image_view);
+        final String uri = getArguments().getString(IMAGE_URL);
+        if (!uri.equals(Constants.STUB_IMAGE)) {
+            IMAGE_LOADER.displayImage(uri, imageView);
+        } else {
+            imageView.setImageResource(Constants.STUB_IMAGE_ID);
+        }
         return rootView;
     }
 

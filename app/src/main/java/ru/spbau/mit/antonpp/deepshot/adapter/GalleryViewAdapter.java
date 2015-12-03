@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -14,6 +13,8 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.List;
 
+import pl.droidsonroids.gif.GifImageView;
+import ru.spbau.mit.antonpp.deepshot.Constants;
 import ru.spbau.mit.antonpp.deepshot.R;
 import ru.spbau.mit.antonpp.deepshot.network.model.ResultItem;
 
@@ -51,7 +52,7 @@ public class GalleryViewAdapter extends ArrayAdapter<ResultItem> {
 
         if (row == null) {
             row = inflater.inflate(LAYOUT_RESOURCE_ID, parent, false);
-            holder = new ViewHolder((ImageView) row.findViewById(R.id.gallery_image_item),
+            holder = new ViewHolder((GifImageView) row.findViewById(R.id.gallery_image_item),
                     (TextView) row.findViewById(R.id.gallery_text_id),
                     (TextView) row.findViewById(R.id.gallery_text_status));
 
@@ -63,23 +64,28 @@ public class GalleryViewAdapter extends ArrayAdapter<ResultItem> {
         final ResultItem item = getItem(position);
         holder.getTxtTitle().setText(String.format("id: %d", item.getId()));
         holder.getTxtStatus().setText(String.format("status: %s", item.getStatus()));
-        IMAGE_LOADER.displayImage(item.getUri(), holder.getImgIcon(), DISPLAY_IMAGE_OPTIONS);
+        final String imageUri = item.getUri();
+        if (!imageUri.equals(Constants.STUB_IMAGE)) {
+            IMAGE_LOADER.displayImage(imageUri, holder.getImgIcon(), DISPLAY_IMAGE_OPTIONS);
+        } else {
+            holder.getImgIcon().setImageResource(Constants.STUB_IMAGE_ID);
+        }
 
         return row;
     }
 
     private static class ViewHolder {
-        private ImageView imgIcon;
+        private GifImageView imgIcon;
         private TextView txtTitle;
         private TextView txtStatus;
 
-        public ViewHolder(ImageView imgIcon, TextView txtTitle, TextView txtStatus) {
+        public ViewHolder(GifImageView imgIcon, TextView txtTitle, TextView txtStatus) {
             this.imgIcon = imgIcon;
             this.txtTitle = txtTitle;
             this.txtStatus = txtStatus;
         }
 
-        public ImageView getImgIcon() {
+        public GifImageView getImgIcon() {
             return imgIcon;
         }
 
