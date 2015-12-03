@@ -9,7 +9,7 @@ import android.widget.ListView;
 
 import java.util.List;
 
-import ru.spbau.mit.antonpp.deepshot.MainMenuActivity;
+import ru.spbau.mit.antonpp.deepshot.MainActivity;
 import ru.spbau.mit.antonpp.deepshot.adapter.FilterListAdapter;
 import ru.spbau.mit.antonpp.deepshot.async.StyleListLoader;
 import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
@@ -46,7 +46,7 @@ public class StyleListFragment extends ListFragment implements LoaderManager.Loa
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        ((MainMenuActivity) getActivity()).onStyleChosen(adapter.getItem(position).getId());
+        ((MainActivity) getActivity()).onStyleChosen(adapter.getItem(position).getId());
     }
 
     @Override

@@ -22,20 +22,20 @@ import ru.spbau.mit.antonpp.deepshot.network.model.ResultItem;
  * @author antonpp
  * @since 13/11/15
  */
-public class GalleryFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<ResultItem>> {
+public class GalleryGridFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<ResultItem>> {
 
-    public static final String TAG = GalleryFragment.class.getName();
+    public static final String TAG = GalleryGridFragment.class.getName();
 
     private GalleryViewAdapter adapter;
     private GridView gridView;
     private OnResultImageClickedListener onResultImageClickedListener;
 
-    public GalleryFragment() {
+    public GalleryGridFragment() {
         // Required empty public constructor
     }
 
-    public static GalleryFragment newInstance() {
-        return new GalleryFragment();
+    public static GalleryGridFragment newInstance() {
+        return new GalleryGridFragment();
     }
 
     @Override
@@ -47,9 +47,10 @@ public class GalleryFragment extends Fragment implements LoaderManager.LoaderCal
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                onResultImageClickedListener.onResultImageClicked(adapter.getItem(i).getUri());
+                onResultImageClickedListener.onResultImageClicked(i);
             }
         });
+        gridView.setStretchMode(GridView.STRETCH_SPACING_UNIFORM);
         getLoaderManager().initLoader(0, null, this);
     }
 
@@ -96,6 +97,6 @@ public class GalleryFragment extends Fragment implements LoaderManager.LoaderCal
     }
 
     public interface OnResultImageClickedListener {
-        void onResultImageClicked(String imageUrl);
+        void onResultImageClicked(int index);
     }
 }

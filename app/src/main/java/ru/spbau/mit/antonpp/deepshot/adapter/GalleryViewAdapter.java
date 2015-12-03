@@ -5,16 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
-
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 
 import java.util.List;
 
 import pl.droidsonroids.gif.GifImageView;
-import ru.spbau.mit.antonpp.deepshot.Constants;
+import ru.spbau.mit.antonpp.deepshot.MainApplication;
 import ru.spbau.mit.antonpp.deepshot.R;
 import ru.spbau.mit.antonpp.deepshot.network.model.ResultItem;
 
@@ -24,11 +19,7 @@ import ru.spbau.mit.antonpp.deepshot.network.model.ResultItem;
  */
 public class GalleryViewAdapter extends ArrayAdapter<ResultItem> {
 
-    private static final ImageLoader IMAGE_LOADER = ImageLoader.getInstance();
-
-    private static final int LAYOUT_RESOURCE_ID = R.layout.view_gallery_item;
-    private static final DisplayImageOptions DISPLAY_IMAGE_OPTIONS =
-            new DisplayImageOptions.Builder().imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2).build();
+    private static final int LAYOUT_RESOURCE_ID = R.layout.layout_gallery_item;
 
     private final LayoutInflater inflater;
 
@@ -52,9 +43,7 @@ public class GalleryViewAdapter extends ArrayAdapter<ResultItem> {
 
         if (row == null) {
             row = inflater.inflate(LAYOUT_RESOURCE_ID, parent, false);
-            holder = new ViewHolder((GifImageView) row.findViewById(R.id.gallery_image_item),
-                    (TextView) row.findViewById(R.id.gallery_text_id),
-                    (TextView) row.findViewById(R.id.gallery_text_status));
+            holder = new ViewHolder((GifImageView) row.findViewById(R.id.gallery_image_item));
 
             row.setTag(holder);
         } else {
@@ -62,39 +51,20 @@ public class GalleryViewAdapter extends ArrayAdapter<ResultItem> {
         }
 
         final ResultItem item = getItem(position);
-        holder.getTxtTitle().setText(String.format("id: %d", item.getId()));
-        holder.getTxtStatus().setText(String.format("status: %s", item.getStatus()));
-        final String imageUri = item.getUri();
-        if (!imageUri.equals(Constants.STUB_IMAGE)) {
-            IMAGE_LOADER.displayImage(imageUri, holder.getImgIcon(), DISPLAY_IMAGE_OPTIONS);
-        } else {
-            holder.getImgIcon().setImageResource(Constants.STUB_IMAGE_ID);
-        }
+        MainApplication.displayImage(item.getUri(), holder.getImgIcon());
 
         return row;
     }
 
     private static class ViewHolder {
         private GifImageView imgIcon;
-        private TextView txtTitle;
-        private TextView txtStatus;
 
-        public ViewHolder(GifImageView imgIcon, TextView txtTitle, TextView txtStatus) {
+        public ViewHolder(GifImageView imgIcon) {
             this.imgIcon = imgIcon;
-            this.txtTitle = txtTitle;
-            this.txtStatus = txtStatus;
         }
 
         public GifImageView getImgIcon() {
             return imgIcon;
-        }
-
-        public TextView getTxtTitle() {
-            return txtTitle;
-        }
-
-        public TextView getTxtStatus() {
-            return txtStatus;
         }
     }
 }

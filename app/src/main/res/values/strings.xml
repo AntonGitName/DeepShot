@@ -8,7 +8,7 @@
     <string name="image_send_button">Send Image</string>
     <string name="dialog_choose_image">Select Image</string>
     <string name="quit_button">Quit</string>
-    <string name="about_button">Help</string>
+    <string name="help_button">Help</string>
     <string name="gallery_button">Your gallery</string>
     <string name="title_activity_main_menu">Deep Shot</string>
     <string name="create_label">Creating</string>

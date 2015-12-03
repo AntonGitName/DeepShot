@@ -4,8 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.spbau.mit.antonpp.deepshot.Constants;
+import ru.spbau.mit.antonpp.deepshot.MainApplication;
 import ru.spbau.mit.antonpp.deepshot.network.model.ResultItem;
 import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
 
@@ -37,7 +36,6 @@ public class DataWrapper {
 
     private static DataWrapper instance;
 
-    private final ImageLoader imageLoader = ImageLoader.getInstance();
     private final Context context;
     private String username;
     private String gcmRegistrationId;
@@ -64,7 +62,6 @@ public class DataWrapper {
         this.username = username;
     }
 
-    // TODO
     public List<ResultItem> getResultItems() {
         return new ArrayList<>(resultItems);
     }
@@ -91,15 +88,16 @@ public class DataWrapper {
         return false;
     }
 
-    public void updateStyles() {
+    public boolean updateStyles() {
         JSONArray jsonArray;
         try {
             jsonArray = new JSONArray(Util.sendGET(NetworkConfiguration.URL_GET_LIST_STYLES));
         } catch (JSONException | IOException e) {
             Log.e(TAG, e.getMessage());
-            return;
+            return false;
         }
         final int n = jsonArray.length();
+        boolean isOkay = true;
         for (int i = 0; i < n; ++i) {
             try {
                 final long styleId = jsonArray.getLong(i);
@@ -111,19 +109,22 @@ public class DataWrapper {
                 styleItems.add(styleItem);
             } catch (JSONException | IOException e) {
                 Log.e(TAG, e.getMessage());
+                isOkay = false;
             }
         }
+        return isOkay;
     }
 
-    public void updateResults() {
+    public boolean updateResults() {
         JSONArray jsonArray;
         try {
             jsonArray = new JSONArray(Util.sendGET(NetworkConfiguration.URL_GET_LIST_RESULTS, "username", username));
         } catch (JSONException | IOException e) {
             Log.e(TAG, e.getMessage());
-            return;
+            return false;
         }
         final int n = jsonArray.length();
+        boolean isOkay = true;
         for (int i = 0; i < n; ++i) {
             try {
                 final long id = jsonArray.getLong(i);
@@ -141,8 +142,10 @@ public class DataWrapper {
                 }
             } catch (JSONException | IOException e) {
                 Log.e(TAG, e.getMessage());
+                isOkay = false;
             }
         }
+        return isOkay;
     }
 
     public void saveState() {
@@ -211,19 +214,21 @@ public class DataWrapper {
         return stringBuilder.toString();
     }
 
-    public void loadState() {
+    public Exception loadState() {
+        Exception exception = null;
         String cacheJson = null;
         try {
             cacheJson = readCacheFile();
         } catch (FileNotFoundException e) {
             Log.v(TAG, "Cache file not found");
+            exception = e;
         }
 
         resultItems = new ArrayList<>();
         styleItems = new ArrayList<>();
 
         if (cacheJson == null) {
-            return;
+            return exception;
         }
 
         try {
@@ -244,7 +249,9 @@ public class DataWrapper {
             }
         } catch (JSONException e) {
             Log.e(TAG, "Could not load cache file");
+            exception = e;
         }
+        return exception;
     }
 
     public void setGcmRegistrationId(String gcmRegistrationId) {
@@ -252,7 +259,7 @@ public class DataWrapper {
     }
 
     public void sendImage(String imageUrl, long styleId) {
-        Bitmap image = imageLoader.loadImageSync(imageUrl);
+        Bitmap image = MainApplication.loadImageSync(imageUrl);
         String encodedImage = Util.encodeImage(image);
         Util.sendImage(username, encodedImage, styleId, gcmRegistrationId);
     }
@@ -264,5 +271,9 @@ public class DataWrapper {
         if (cacheFile.exists()) {
             cacheFile.delete();
         }
+    }
+
+    public boolean sync() {
+        return (updateStyles() && updateResults());
     }
 }

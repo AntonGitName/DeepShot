@@ -6,6 +6,7 @@
         <item
             android:id="@+id/navigation_gallery"
             android:checkable="true"
+            android:checked="true"
             android:icon="@android:drawable/ic_menu_gallery"
             android:title="@string/gallery_button" />
         <item
@@ -18,6 +19,11 @@
             android:checkable="true"
             android:icon="@android:drawable/ic_menu_manage"
             android:title="@string/settings_button" />
+        <item
+            android:id="@+id/navigation_help"
+            android:checkable="true"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="@string/help_button" />
         <item
             android:id="@+id/navigation_synchronize"
             android:checkable="true"

@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import ru.spbau.mit.antonpp.deepshot.MainMenuActivity;
+import ru.spbau.mit.antonpp.deepshot.MainActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
 
 public class ImageChooseFragment extends DialogFragment {
@@ -47,7 +47,7 @@ public class ImageChooseFragment extends DialogFragment {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     // Ensure that there's a camera activity to handle the intent
                     if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                        activity.startActivityForResult(takePictureIntent, MainMenuActivity.PICK_FROM_CAMERA);
+                        activity.startActivityForResult(takePictureIntent, MainActivity.PICK_FROM_CAMERA);
                     }
                 } else {
                     Intent intent = new Intent();
@@ -55,7 +55,7 @@ public class ImageChooseFragment extends DialogFragment {
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
 
-                    activity.startActivityForResult(Intent.createChooser(intent, "Complete action using"), MainMenuActivity.PICK_FROM_FILE);
+                    activity.startActivityForResult(Intent.createChooser(intent, "Complete action using"), MainActivity.PICK_FROM_FILE);
                 }
             }
         });

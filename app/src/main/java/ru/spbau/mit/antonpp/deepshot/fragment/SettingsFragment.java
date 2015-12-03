@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.AccountPicker;
 
+import ru.spbau.mit.antonpp.deepshot.MainActivity;
 import ru.spbau.mit.antonpp.deepshot.MainApplication;
-import ru.spbau.mit.antonpp.deepshot.MainMenuActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
 import ru.spbau.mit.antonpp.deepshot.network.NetworkConfiguration;
 
@@ -70,7 +70,7 @@ public class SettingsFragment extends Fragment {
 
                 Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
                         false, null, null, null, null);
-                getActivity().startActivityForResult(intent, MainMenuActivity.SIGN_INTENT_RETURN_CODE);
+                getActivity().startActivityForResult(intent, MainActivity.SIGN_INTENT_RETURN_CODE);
 
             }
         });

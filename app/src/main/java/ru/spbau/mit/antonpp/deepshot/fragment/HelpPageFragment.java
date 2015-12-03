@@ -41,7 +41,7 @@ public class HelpPageFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_help_page, container, false);
 
         final ViewPager pager = (ViewPager) rootView.findViewById(R.id.help_pager);
-        pager.setAdapter(new HelpPageAdapter(getFragmentManager()));
+        pager.setAdapter(new PageAdapter(getFragmentManager()));
 
         return rootView;
     }
@@ -79,9 +79,9 @@ public class HelpPageFragment extends Fragment {
         }
     }
 
-    private static final class HelpPageAdapter extends FragmentStatePagerAdapter {
+    private static final class PageAdapter extends FragmentStatePagerAdapter {
 
-        public HelpPageAdapter(FragmentManager fm) {
+        public PageAdapter(FragmentManager fm) {
             super(fm);
         }
 

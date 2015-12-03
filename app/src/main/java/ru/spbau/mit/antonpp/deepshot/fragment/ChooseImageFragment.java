@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
+import ru.spbau.mit.antonpp.deepshot.MainApplication;
 import ru.spbau.mit.antonpp.deepshot.R;
 
 /**
@@ -19,7 +18,6 @@ public class ChooseImageFragment extends Fragment {
 
     public static final String TAG = ChooseImageFragment.class.getName();
 
-    private final ImageLoader imageLoader = ImageLoader.getInstance();
     private ImageView imageView;
 
     public ChooseImageFragment() {
@@ -47,6 +45,6 @@ public class ChooseImageFragment extends Fragment {
     }
 
     public void setImage(String uri) {
-        imageLoader.displayImage(uri, imageView);
+        MainApplication.displayImage(uri, imageView);
     }
 }

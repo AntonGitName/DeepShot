@@ -1,14 +1,19 @@
 package ru.spbau.mit.antonpp.deepshot;
 
 import android.accounts.AccountManager;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -21,25 +26,25 @@ import android.view.MenuItem;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import ru.spbau.mit.antonpp.deepshot.async.UpdateDataTask;
 import ru.spbau.mit.antonpp.deepshot.fragment.CreatePaintingFragment;
-import ru.spbau.mit.antonpp.deepshot.fragment.GalleryFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.GalleryGridFragment;
+import ru.spbau.mit.antonpp.deepshot.fragment.GalleryListFragment;
 import ru.spbau.mit.antonpp.deepshot.fragment.HelpPageFragment;
-import ru.spbau.mit.antonpp.deepshot.fragment.MainMenuFragment;
 import ru.spbau.mit.antonpp.deepshot.fragment.SettingsFragment;
-import ru.spbau.mit.antonpp.deepshot.fragment.ViewResultFragment;
 import ru.spbau.mit.antonpp.deepshot.network.NetworkConfiguration;
 import ru.spbau.mit.antonpp.deepshot.service.RegistrationIntentService;
 
-public class MainMenuActivity
+public class MainActivity
         extends AppCompatActivity
-        implements MainMenuFragment.OnMainMenuOptionSelectedListener,
-        GalleryFragment.OnResultImageClickedListener, NavigationView.OnNavigationItemSelectedListener {
+        implements GalleryGridFragment.OnResultImageClickedListener,
+        NavigationView.OnNavigationItemSelectedListener {
 
     public final static String KEY_IP = "KEY_IP";
     public static final int PICK_FROM_CAMERA = 1;
     public static final int PICK_FROM_FILE = 2;
     public static final int SIGN_INTENT_RETURN_CODE = 3;
-    private static final String TAG = MainMenuActivity.class.getName();
+    private static final String TAG = MainActivity.class.getName();
     private static final String KEY_USERNAME = "KEY_USERNAME";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
@@ -47,9 +52,20 @@ public class MainMenuActivity
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
-    private Toolbar toolbar;
     private ActionBarDrawerToggle toggle;
-    private DrawerLayout drawer;
+    private NavigationView navigationView;
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,31 +74,31 @@ public class MainMenuActivity
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            startFragment();
+            onGalleryButtonClicked();
         }
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                SharedPreferences sharedPreferences =
+                final SharedPreferences sharedPreferences =
                         PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
+                final boolean sentToken = sharedPreferences
                         .getBoolean(Constants.SENT_TOKEN_TO_SERVER, false);
-
             }
         };
+
+        loadSettings();
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
@@ -91,64 +107,26 @@ public class MainMenuActivity
         }
     }
 
-    private void startFragment() {
-        getSupportFragmentManager().
-                beginTransaction().
-                replace(R.id.fragment_container, SettingsFragment.newInstance(), SettingsFragment.TAG).
-                commit();
-    }
-
     private void onCreateButtonClicked() {
-        getSupportFragmentManager().
-                beginTransaction().
-                replace(R.id.fragment_container, CreatePaintingFragment.newInstance(), CreatePaintingFragment.TAG).
-                addToBackStack(MainMenuFragment.TAG).
-                commit();
+        pushFragment(CreatePaintingFragment.newInstance(), CreatePaintingFragment.TAG);
     }
 
     private void onHelpButtonClicked() {
-        getSupportFragmentManager().
-                beginTransaction().
-                replace(R.id.fragment_container, HelpPageFragment.newInstance(), HelpPageFragment.TAG).
-                addToBackStack(MainMenuFragment.TAG).
-                commit();
+        pushFragment(HelpPageFragment.newInstance(), HelpPageFragment.TAG);
     }
 
     private void onGalleryButtonClicked() {
-        getSupportFragmentManager().
-                beginTransaction().
-                replace(R.id.fragment_container, GalleryFragment.newInstance(), GalleryFragment.TAG).
-                addToBackStack(MainMenuFragment.TAG).
-                commit();
-    }
-
-    @Override
-    public void onMainMenuOptionSelected(MainMenuFragment.MainMenuOption option) {
-        switch (option) {
-            case CREATE:
-                onCreateButtonClicked();
-                break;
-            case GALLERY:
-                onGalleryButtonClicked();
-                break;
-            case SETTINGS:
-                onSettingsButtonClicked();
-                break;
-            case HELP:
-                onHelpButtonClicked();
-                break;
-            case EXIT:
-                finish();
-                break;
-        }
+        pushFragment(GalleryGridFragment.newInstance(), GalleryGridFragment.TAG);
     }
 
     private void onSettingsButtonClicked() {
-        getSupportFragmentManager().
-                beginTransaction().
-                replace(R.id.fragment_container, SettingsFragment.newInstance(), SettingsFragment.TAG).
-                addToBackStack(MainMenuFragment.TAG).
-                commit();
+        pushFragment(SettingsFragment.newInstance(), SettingsFragment.TAG);
+    }
+
+    private void onSynchronizationButtonClicked() {
+        onGalleryButtonClicked();
+        final ProgressDialog progressDialog = ProgressDialog.show(this, "Synchronization with server...", "Please wait", true);
+        new UpdateDataTask(progressDialog, this).execute();
     }
 
     public void onStyleChosen(long styleId) {
@@ -198,8 +176,6 @@ public class MainMenuActivity
     @Override
     protected void onResume() {
         super.onResume();
-        MainApplication.getDataWrapper().setUsername(getLastUsername());
-        NetworkConfiguration.resetIp(getLastIp());
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));
     }
@@ -212,43 +188,85 @@ public class MainMenuActivity
 
     @Override
     protected void onStop() {
-        MainApplication.getDataWrapper().saveState();
-        saveLastIp();
-        saveLastUsername();
+        saveSettings();
         super.onStop();
     }
 
+    private void pushFragment(Fragment fragment, String tag) {
+        final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment_container, fragment, tag);
+        if (!getCurrentFragmentTag().equals(tag)) {
+            ft.addToBackStack(tag);
+        }
+        ft.commit();
+    }
+
     @Override
-    public void onResultImageClicked(String imageUrl) {
-        getSupportFragmentManager().
-                beginTransaction().
-                replace(R.id.fragment_container, ViewResultFragment.newInstance(imageUrl), ViewResultFragment.TAG).
-                addToBackStack(GalleryFragment.TAG).
-                commit();
+    public void onResultImageClicked(int index) {
+        pushFragment(GalleryListFragment.newInstance(index), GalleryListFragment.TAG);
     }
 
-    private String getLastIp() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(KEY_IP, NetworkConfiguration.DEFAULT_IP);
+    private void loadSettings() {
+        final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        MainApplication.getDataWrapper().setUsername(sp.getString(KEY_USERNAME, DEFAULT_USERNAME));
+        NetworkConfiguration.resetIp(sp.getString(KEY_IP, NetworkConfiguration.DEFAULT_IP));
     }
 
-    private void saveLastIp() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+    private void saveSettings() {
+        MainApplication.getDataWrapper().saveState();
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.edit().
                 putString(KEY_IP, NetworkConfiguration.SERVER_IP).
                 apply();
-    }
-
-    private String getLastUsername() {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return preferences.getString(KEY_USERNAME, DEFAULT_USERNAME);
-    }
-
-    private void saveLastUsername() {
         final String username = MainApplication.getDataWrapper().getUsername();
         if (!username.equals(DEFAULT_USERNAME)) {
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             preferences.edit().putString(KEY_USERNAME, username).apply();
+        }
+    }
+
+    private String getCurrentFragmentTag() {
+        final FragmentManager fm = getSupportFragmentManager();
+        final int n = fm.getBackStackEntryCount();
+        final String tag;
+        if (n != 0) {
+            tag = fm.getBackStackEntryAt(n - 1).getName();
+        } else {
+            tag = "";
+        }
+        Log.d(TAG, tag);
+        return tag;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+            if (getCurrentFragmentTag().length() == 0) {
+                super.onBackPressed();
+            }
+            updateDrawer();
+        }
+    }
+
+    private void updateDrawer() {
+        final String tag = getCurrentFragmentTag();
+        int index = -1;
+        if (GalleryGridFragment.TAG.equals(tag)) {
+            index = 0;
+        } else if (GalleryListFragment.TAG.equals(tag)) {
+            index = 0;
+        } else if (SettingsFragment.TAG.equals(tag)) {
+            index = 2;
+        } else if (HelpPageFragment.TAG.equals(tag)) {
+            index = 3;
+        } else if (CreatePaintingFragment.TAG.equals(tag)) {
+            index = 1;
+        }
+        if (index != -1) {
+            navigationView.getMenu().getItem(index).setChecked(true);
         }
     }
 
@@ -276,7 +294,7 @@ public class MainMenuActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        final int id = item.getItemId();
         item.setChecked(false);
 
         switch (id) {
@@ -289,13 +307,17 @@ public class MainMenuActivity
             case R.id.navigation_settings:
                 onSettingsButtonClicked();
                 break;
+            case R.id.navigation_help:
+                onHelpButtonClicked();
+                break;
             case R.id.navigation_synchronize:
+                onSynchronizationButtonClicked();
                 break;
             default:
                 return true;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
 
         return true;

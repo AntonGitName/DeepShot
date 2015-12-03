@@ -8,12 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-
 import java.util.List;
 
+import ru.spbau.mit.antonpp.deepshot.MainApplication;
 import ru.spbau.mit.antonpp.deepshot.R;
 import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
 
@@ -24,11 +21,6 @@ import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
 public class FilterListAdapter extends ArrayAdapter<StyleItem> {
 
     private static final int LAYOUT_RESOURCE_ID = R.layout.listview_item_row;
-    private static final DisplayImageOptions DISPLAY_IMAGE_OPTIONS =
-            new DisplayImageOptions.Builder().imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2).build();
-
-    private static final ImageLoader IMAGE_LOADER = ImageLoader.getInstance();
-
 
     private final LayoutInflater inflater;
 
@@ -62,7 +54,7 @@ public class FilterListAdapter extends ArrayAdapter<StyleItem> {
 
         final StyleItem item = getItem(position);
         holder.getTxtTitle().setText(item.getName());
-        IMAGE_LOADER.displayImage(item.getUri(), holder.getImgIcon(), DISPLAY_IMAGE_OPTIONS);
+        MainApplication.displayImage(item.getUri(), holder.getImgIcon());
 
         return row;
     }
