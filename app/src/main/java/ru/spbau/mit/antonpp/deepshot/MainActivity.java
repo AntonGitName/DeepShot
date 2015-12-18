@@ -196,6 +196,7 @@ public class MainActivity
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment, tag);
         if (!getCurrentFragmentTag().equals(tag)) {
+            // TODO
 //            ft.addToBackStack(tag);
         }
         ft.commit();
