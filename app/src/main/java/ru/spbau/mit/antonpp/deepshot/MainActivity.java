@@ -115,7 +115,7 @@ public class MainActivity
         pushFragment(HelpPageFragment.newInstance(), HelpPageFragment.TAG);
     }
 
-    private void onGalleryButtonClicked() {
+    public void onGalleryButtonClicked() {
         pushFragment(GalleryGridFragment.newInstance(), GalleryGridFragment.TAG);
     }
 
@@ -196,7 +196,7 @@ public class MainActivity
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment, tag);
         if (!getCurrentFragmentTag().equals(tag)) {
-            ft.addToBackStack(tag);
+//            ft.addToBackStack(tag);
         }
         ft.commit();
     }

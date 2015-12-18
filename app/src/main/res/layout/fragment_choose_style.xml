@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/step2"
-        android:textColor="#add8e6"
-        android:textSize="40sp" />
+        android:textColor="@color/colorCaption"
+        android:textSize="30sp" />
 
     <LinearLayout
         android:layout_width="match_parent"

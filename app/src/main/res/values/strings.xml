@@ -11,20 +11,20 @@
     <string name="help_button">Help</string>
     <string name="gallery_button">Your gallery</string>
     <string name="title_activity_main_menu">Deep Shot</string>
-    <string name="create_label">Creating</string>
-    <string name="create_text">blah-blah-blah</string>
-    <string name="gallery_label">Gallery</string>
-    <string name="gallery_text">blah-blah-blahdi-blah</string>
-    <string name="about_label">SPBAU 2015</string>
-    <string name="about_text">the copyright</string>
+    <string name="usage_label">How To Use</string>
+    <string name="usage_text">First of all, make sure that you have logged in your google account. You can do it through settings page. This application allows you to combine your picture and a masterpiece of a famous painter. To do this go the Create Painting page and follows to easy step but make sure before that you have an internet connection on your device. When you are done with steps and your picture was sent, you will have to wait some time to receive the result. Do not panic - you can leave application at any time and you will be notified when the result is ready. To checkout your results go to the Gallery page (new images will be there only if you are connected).</string>
+    <string name="explanation_label">How It Works</string>
+    <string name="explanation_text">*The explanation*</string>
+    <string name="about_label">About Us</string>
+    <string name="about_text">This application was made by students from Saint-Petersburg Academic University: Anton Mordberg (Android + Server) and Semyon Polyakov (Machine Learning). If you have any questions feel free to contact us via github (https://github.com/AntonGitName/DeepShot). </string>
     <string name="next_button">Next</string>
     <string name="prev_button">Back</string>
     <string name="step1">Step 1. Choose Image</string>
-    <string name="step2">Step 2. Choose Filter</string>
+    <string name="step2">Step 2. Choose Style</string>
     <string name="create_choose1_button">Choose image</string>
     <string name="create_choose2_button">Choose filter</string>
     <string name="chosen_image">chosen image</string>
-    <string name="filter_list_header">Available filters</string>
+    <string name="filter_list_header">Available styles</string>
     <string name="settings_button">Settings</string>
     <string name="current_ip_text">Current server IP:</string>
     <string name="btn_clear_cache">Clear cache</string>
@@ -34,4 +34,5 @@
     <string name="change_server_text">Change server IP:</string>
     <string name="btn_set_server">change</string>
     <string name="synchronize_button">Synchronize</string>
+    <string name="empty_gallery">Your Gallery is empty</string>
 </resources>

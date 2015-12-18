@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import ru.spbau.mit.antonpp.deepshot.MainActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
 import ru.spbau.mit.antonpp.deepshot.async.SendImageTask;
 
@@ -20,14 +21,15 @@ import ru.spbau.mit.antonpp.deepshot.async.SendImageTask;
 public class CreatePaintingFragment extends Fragment {
 
     public static final String TAG = CreatePaintingFragment.class.getName();
+    private static final int PAGES_COUNT = 2;
 
     private ChooseStyleFragment chooseStyleFragment;
     private ChooseImageFragment chooseImageFragment;
     private ViewPager pager;
-    private String imageUri;
+    private String imageUri = null;
     private Button nextButton;
     private Button prevButton;
-    private long styleId;
+    private Long styleId = null;
 
     public CreatePaintingFragment() {
         // Required empty public constructor
@@ -39,18 +41,18 @@ public class CreatePaintingFragment extends Fragment {
 
     private void onSend() {
         new SendImageTask(imageUri, styleId).execute();
-        getFragmentManager().popBackStack();
+        ((MainActivity) getActivity()).onGalleryButtonClicked();
     }
 
     public void onImageChosen(String uri) {
         imageUri = uri;
-        nextButton.setEnabled(pager.getCurrentItem() == 0);
         chooseImageFragment.setImage(uri);
+        updateMoveButtons(pager.getCurrentItem());
     }
 
     public void onStyleChosen(long id) {
         styleId = id;
-        nextButton.setEnabled(true);
+        updateMoveButtons(pager.getCurrentItem());
     }
 
     @Override
@@ -62,40 +64,48 @@ public class CreatePaintingFragment extends Fragment {
         chooseImageFragment = ChooseImageFragment.newInstance();
         chooseStyleFragment = ChooseStyleFragment.newInstance();
 
-        nextButton = (Button) rootView.findViewById(R.id.create_next_button);
-        prevButton = (Button) rootView.findViewById(R.id.create_prev_button);
-
         pager = (ViewPager) rootView.findViewById(R.id.create_pager);
         pager.setAdapter(new CreatePaintingPageAdapter(getFragmentManager(), new Fragment[]{chooseImageFragment, chooseStyleFragment}));
         pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
-                prevButton.setEnabled(position != 0);
-                nextButton.setEnabled(position == 0 && imageUri != null);
+            public void onPageSelected(int position) {
+                updateMoveButtons(position);
+            }
+        });
+
+        prevButton = (Button) rootView.findViewById(R.id.prev_button);
+        nextButton = (Button) rootView.findViewById(R.id.next_button);
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (pager.getCurrentItem() == PAGES_COUNT - 1) {
+                    onSend();
+                } else {
+                    pager.setCurrentItem(pager.getCurrentItem() + 1);
+                }
             }
         });
 
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pager.setCurrentItem(0);
+                pager.setCurrentItem(pager.getCurrentItem() - 1);
             }
         });
 
-        nextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (pager.getCurrentItem() == 0) {
-                    pager.setCurrentItem(1);
-                } else {
-                    onSend();
-                }
-            }
-        });
+        updateMoveButtons(pager.getCurrentItem());
 
         return rootView;
+    }
+
+    private void updateMoveButtons(int position) {
+        prevButton.setEnabled(position != 0);
+        if (position == 0) {
+            nextButton.setEnabled(imageUri != null);
+        } else {
+            nextButton.setEnabled(styleId != null);
+        }
     }
 
     private static final class CreatePaintingPageAdapter extends FragmentStatePagerAdapter {

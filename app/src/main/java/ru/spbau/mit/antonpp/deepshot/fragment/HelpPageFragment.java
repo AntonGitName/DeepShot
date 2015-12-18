@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import ru.spbau.mit.antonpp.deepshot.R;
@@ -20,11 +21,16 @@ public class HelpPageFragment extends Fragment {
 
     public static final String TAG = HelpPageFragment.class.getName();
 
-    private static final int PAGE_STRINGS_RESOURCES_ID[] = {R.string.create_label, R.string.create_text,
-            R.string.gallery_label, R.string.gallery_text, R.string.about_label, R.string.about_text};
+    private static final int PAGE_STRINGS_RESOURCES_ID[] = {
+            R.string.about_label, R.string.about_text,
+            R.string.usage_label, R.string.usage_text,
+            R.string.explanation_label, R.string.explanation_text};
 
     private static final int PAGES_COUNT = 3;
     private static final float TEXT_SIZE = 22f;
+
+    private Button nextButton;
+    private Button prevButton;
 
     public HelpPageFragment() {
         // Required empty public constructor
@@ -42,8 +48,38 @@ public class HelpPageFragment extends Fragment {
 
         final ViewPager pager = (ViewPager) rootView.findViewById(R.id.help_pager);
         pager.setAdapter(new PageAdapter(getFragmentManager()));
+        pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                updateMoveButtons(position);
+            }
+        });
+
+        prevButton = (Button) rootView.findViewById(R.id.prev_button);
+        nextButton = (Button) rootView.findViewById(R.id.next_button);
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pager.setCurrentItem(pager.getCurrentItem() + 1);
+            }
+        });
+
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pager.setCurrentItem(pager.getCurrentItem() - 1);
+            }
+        });
+
+        updateMoveButtons(0);
 
         return rootView;
+    }
+
+    private void updateMoveButtons(int position) {
+        prevButton.setEnabled(position != 0);
+        nextButton.setEnabled(position != PAGES_COUNT - 1);
     }
 
     public static final class PageFragment extends Fragment {

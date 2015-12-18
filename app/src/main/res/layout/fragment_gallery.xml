@@ -16,4 +16,13 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="5dp" />
 
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/empty_gallery"
+        android:textColor="@color/colorText"
+        android:textSize="20sp" />
+
 </RelativeLayout>

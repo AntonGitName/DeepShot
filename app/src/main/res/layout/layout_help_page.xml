@@ -1,43 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center_vertical"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/help_page_label"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.10"
-        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_horizontal"
+        android:gravity="center"
+        android:textColor="@color/colorCaption"
         android:textSize="40sp" />
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.6"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/help_page_label"
+        android:paddingTop="20dp">
 
-        <ScrollView
-            android:id="@+id/scrollView"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/help_page_text"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_weight="0.7">
+            android:gravity="center"
+            android:textColor="@color/colorText"
+            android:textSize="20sp" />
+    </ScrollView>
 
-            <TextView
-                android:id="@+id/help_page_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textSize="20sp" />
-        </ScrollView>
 
-    </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

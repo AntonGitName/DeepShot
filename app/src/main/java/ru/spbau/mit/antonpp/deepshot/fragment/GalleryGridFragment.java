@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -59,6 +60,8 @@ public class GalleryGridFragment extends Fragment implements LoaderManager.Loade
                              Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
         gridView = (GridView) rootView.findViewById(R.id.grid_view);
+        TextView emptyView = (TextView) rootView.findViewById(android.R.id.empty);
+        gridView.setEmptyView(emptyView);
         return rootView;
     }
 

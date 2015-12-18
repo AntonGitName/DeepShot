@@ -6,5 +6,9 @@
     <color name="colorPrimary">#607d8b</color>
     <color name="colorPrimaryDark">#37474F</color>
     <color name="colorAccent">#424242</color>
+
+    <color name="colorCaption">#add8e6</color>
+    <color name="colorText">#d3d3d3</color>
+
     <color name="mainBackgroundColor">#4d5560</color>
 </resources>
