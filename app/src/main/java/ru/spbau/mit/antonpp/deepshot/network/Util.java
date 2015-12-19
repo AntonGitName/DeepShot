@@ -224,11 +224,18 @@ public class Util {
         final JSONObject jsonObject = new JSONObject(Util.sendGET(NetworkConfiguration.URL_GET_RESULT, "id", "" + id));
         ResultItem item = new ResultItem();
         item.setId(id);
+        item.setOwner(jsonObject.getString(ResultItem.KEY_OWNER));
         item.setStatus(ResultItem.Status.valueOf(jsonObject.getString(ResultItem.KEY_STATUS)));
-        if (item.getStatus() == ResultItem.Status.READY) {
-            item.setUri(saveImage(ImageType.RESULT, context, id, jsonObject.getString(ResultItem.KEY_IMAGE)));
-        } else {
-            item.setUri(Constants.STUB_IMAGE);
+        switch (item.getStatus()) {
+            case READY:
+                item.setUri(saveImage(ImageType.RESULT, context, id, jsonObject.getString(ResultItem.KEY_IMAGE)));
+                break;
+            case PROCESSING:
+                item.setUri(Constants.LOADING_IMAGE);
+                break;
+            case FAILED:
+                item.setUri(Constants.ERROR_IMAGE);
+                break;
         }
         return item;
     }

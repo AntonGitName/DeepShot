@@ -30,10 +30,14 @@ public class MainApplication extends Application {
     }
 
     public static void displayImage(String uri, ImageView imageView) {
-        if (!uri.equals(Constants.STUB_IMAGE)) {
+        if (!uri.equals(Constants.LOADING_IMAGE) && !uri.equals(Constants.ERROR_IMAGE)) {
             IMAGE_LOADER.displayImage(uri, imageView);
         } else {
-            imageView.setImageResource(Constants.STUB_IMAGE_LARGE_ID);
+            if (uri.equals(Constants.LOADING_IMAGE)) {
+                imageView.setImageResource(Constants.STUB_IMAGE_LOADING_ID);
+            } else {
+                imageView.setImageResource(Constants.STUB_IMAGE_ERROR_ID);
+            }
         }
     }
 

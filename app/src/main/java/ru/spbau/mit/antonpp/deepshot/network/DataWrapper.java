@@ -63,7 +63,13 @@ public class DataWrapper {
     }
 
     public List<ResultItem> getResultItems() {
-        return new ArrayList<>(resultItems);
+        final List<ResultItem> resultItems = new ArrayList<>();
+        for (ResultItem resultItem : this.resultItems) {
+            if (resultItem.getOwner().equals(username)) {
+                resultItems.add(resultItem);
+            }
+        }
+        return resultItems;
     }
 
     public List<StyleItem> getStyleItems() {

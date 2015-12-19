@@ -29,6 +29,3 @@ proguard/
 
 # Log Files
 *.log
-
-# Database should stay clear
-resources/deepshot.db
