@@ -17,7 +17,7 @@ import ru.spbau.mit.antonpp.deepshot.network.DataWrapper;
  */
 public class MainApplication extends Application {
 
-    private static final String DEFAULT_USERNAME = "TEST_USERNAME";
+    public static final String DEFAULT_USERNAME = "TEST_USERNAME";
     private static final ImageLoader IMAGE_LOADER = ImageLoader.getInstance();
     private static DataWrapper dataWrapper;
 

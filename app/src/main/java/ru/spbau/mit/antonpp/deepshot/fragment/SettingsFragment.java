@@ -68,7 +68,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                Intent intent = AccountPicker.newChooseAccountIntent(null, null, new String[]{"com.google"},
+                Intent intent = AccountPicker.newChooseAccountIntent(null, null, null,
                         false, null, null, null, null);
                 getActivity().startActivityForResult(intent, MainActivity.SIGN_INTENT_RETURN_CODE);
 

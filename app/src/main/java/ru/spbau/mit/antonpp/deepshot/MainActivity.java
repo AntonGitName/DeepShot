@@ -23,6 +23,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -47,8 +48,6 @@ public class MainActivity
     private static final String TAG = MainActivity.class.getName();
     private static final String KEY_USERNAME = "KEY_USERNAME";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    private static final String DEFAULT_USERNAME = "TEST_USERNAME";
 
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
@@ -104,6 +103,12 @@ public class MainActivity
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
+        }
+
+        if (MainApplication.getDataWrapper().getUsername().equals(MainApplication.DEFAULT_USERNAME)) {
+            Intent intent = AccountPicker.newChooseAccountIntent(null, null, null,
+                    false, null, null, null, null);
+            startActivityForResult(intent, MainActivity.SIGN_INTENT_RETURN_CODE);
         }
     }
 
@@ -209,7 +214,7 @@ public class MainActivity
 
     private void loadSettings() {
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        MainApplication.getDataWrapper().setUsername(sp.getString(KEY_USERNAME, DEFAULT_USERNAME));
+        MainApplication.getDataWrapper().setUsername(sp.getString(KEY_USERNAME, MainApplication.DEFAULT_USERNAME));
         NetworkConfiguration.resetIp(sp.getString(KEY_IP, NetworkConfiguration.DEFAULT_IP));
     }
 
@@ -220,7 +225,7 @@ public class MainActivity
                 putString(KEY_IP, NetworkConfiguration.SERVER_IP).
                 apply();
         final String username = MainApplication.getDataWrapper().getUsername();
-        if (!username.equals(DEFAULT_USERNAME)) {
+        if (!username.equals(MainApplication.DEFAULT_USERNAME)) {
             preferences.edit().putString(KEY_USERNAME, username).apply();
         }
     }
