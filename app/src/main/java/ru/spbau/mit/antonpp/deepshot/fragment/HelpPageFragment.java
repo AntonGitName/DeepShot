@@ -3,7 +3,7 @@ package ru.spbau.mit.antonpp.deepshot.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +47,7 @@ public class HelpPageFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_help_page, container, false);
 
         final ViewPager pager = (ViewPager) rootView.findViewById(R.id.help_pager);
-        pager.setAdapter(new PageAdapter(getFragmentManager()));
+        pager.setAdapter(new PageAdapter(getChildFragmentManager()));
         pager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -99,6 +99,15 @@ public class HelpPageFragment extends Fragment {
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             pageNumber = getArguments().getInt(ARGUMENT_PAGE_NUMBER);
+            if (savedInstanceState != null) {
+                pageNumber = savedInstanceState.getInt(ARGUMENT_PAGE_NUMBER);
+            }
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            super.onSaveInstanceState(outState);
+            outState.putInt(ARGUMENT_PAGE_NUMBER, pageNumber);
         }
 
         @Override
@@ -115,7 +124,7 @@ public class HelpPageFragment extends Fragment {
         }
     }
 
-    private static final class PageAdapter extends FragmentStatePagerAdapter {
+    private static final class PageAdapter extends FragmentPagerAdapter {
 
         public PageAdapter(FragmentManager fm) {
             super(fm);
