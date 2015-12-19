@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -26,6 +29,8 @@ import android.view.MenuItem;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
+import java.io.ByteArrayOutputStream;
 
 import ru.spbau.mit.antonpp.deepshot.async.UpdateDataTask;
 import ru.spbau.mit.antonpp.deepshot.fragment.CreatePaintingFragment;
@@ -156,12 +161,26 @@ public class MainActivity
         if (resultCode != RESULT_OK) {
             return;
         }
-        final String imageUri = data.getData().toString();
         final CreatePaintingFragment fragment = (CreatePaintingFragment) getSupportFragmentManager().
                 findFragmentByTag(CreatePaintingFragment.TAG);
-        if (fragment != null) {
-            fragment.onImageChosen(imageUri);
+        if (data.getData() != null) {
+            final String imageUri = data.getData().toString();
+
+            if (fragment != null) {
+                fragment.onImageChosen(imageUri);
+            }
+        } else {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            fragment.onImageChosen(getImageUri(photo).toString());
         }
+
+    }
+
+    public Uri getImageUri(Bitmap inImage) {
+        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 
     @Override

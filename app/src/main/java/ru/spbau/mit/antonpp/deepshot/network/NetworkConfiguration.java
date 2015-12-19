@@ -12,6 +12,7 @@ public class NetworkConfiguration {
     private static final String TAG = NetworkConfiguration.class.getName();
     public static String SERVER_IP;
     public static String SERVER_ADDRESS;
+    public static String SERVER_PORT = "5242";
 
     public static String URL_GET_LIST_STYLES;
     public static String URL_GET_FILTER;
@@ -30,7 +31,7 @@ public class NetworkConfiguration {
         Log.d(TAG, String.format("new ip:[%s]", ip));
 
         SERVER_IP = ip;
-        SERVER_ADDRESS = "http://" + SERVER_IP + ":8080";
+        SERVER_ADDRESS = "http://" + SERVER_IP + ":" + SERVER_PORT;
 
         URL_GET_LIST_STYLES = SERVER_ADDRESS + "/styles/list";
         URL_GET_FILTER = SERVER_ADDRESS + "/styles";
