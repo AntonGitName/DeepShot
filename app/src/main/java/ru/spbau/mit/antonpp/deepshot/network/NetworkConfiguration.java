@@ -9,6 +9,7 @@ import android.util.Log;
 public class NetworkConfiguration {
 
     public final static String DEFAULT_IP = "192.168.65.4";
+    public final static String DEFAULT_PORT = "8080";
     private static final String TAG = NetworkConfiguration.class.getName();
     public static String SERVER_IP;
     public static String SERVER_ADDRESS;
@@ -26,10 +27,12 @@ public class NetworkConfiguration {
         resetIp(DEFAULT_IP);
     }
 
+    public static void resetPort(String port) {
+        SERVER_PORT = port;
+        resetIp(SERVER_IP);
+    }
+
     public static void resetIp(String ip) {
-
-        Log.d(TAG, String.format("new ip:[%s]", ip));
-
         SERVER_IP = ip;
         SERVER_ADDRESS = "http://" + SERVER_IP + ":" + SERVER_PORT;
 
@@ -40,6 +43,9 @@ public class NetworkConfiguration {
         URL_GET_RESULT = SERVER_ADDRESS + "/results";
 
         URL_POST_IMAGE = SERVER_ADDRESS + "/send";
+
+        Log.d(TAG, String.format("new ip  :[%s]", SERVER_IP));
+        Log.d(TAG, String.format("new port:[%s]", SERVER_PORT));
     }
 
 }

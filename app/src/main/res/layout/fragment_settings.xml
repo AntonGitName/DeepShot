@@ -70,6 +70,48 @@
         android:layout_margin="10sp"
         android:gravity="center">
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_port_text"
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_server_port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+    </TableRow>
+
+
+    <TableRow
+        android:layout_margin="10sp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/change_server_port_text"
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/server_port_edittext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorText"
+            android:textSize="16sp" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_margin="10sp"
+        android:gravity="center">
+
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
@@ -80,12 +122,25 @@
         android:layout_margin="10sp"
         android:gravity="center">
 
-    <Button
-            android:id="@+id/btn_set_server"
+        <Button
+            android:id="@+id/btn_set_server_ip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_set_server"
             android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_set_server_port"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_set_server_port"
+            android:textSize="16sp" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_margin="10sp"
+        android:gravity="center">
 
         <Button
             android:id="@+id/btn_clear_cache"
@@ -94,5 +149,6 @@
             android:text="@string/btn_clear_cache"
             android:textSize="16sp" />
     </TableRow>
+
 
 </TableLayout>

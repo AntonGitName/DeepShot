@@ -8,11 +8,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,8 +27,6 @@ import com.google.android.gms.common.AccountPicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-import java.io.ByteArrayOutputStream;
-
 import ru.spbau.mit.antonpp.deepshot.async.UpdateDataTask;
 import ru.spbau.mit.antonpp.deepshot.fragment.CreatePaintingFragment;
 import ru.spbau.mit.antonpp.deepshot.fragment.GalleryGridFragment;
@@ -47,6 +42,7 @@ public class MainActivity
         NavigationView.OnNavigationItemSelectedListener {
 
     public final static String KEY_IP = "KEY_IP";
+    public final static String KEY_PORT = "KEY_PORT";
     public static final int PICK_FROM_CAMERA = 1;
     public static final int PICK_FROM_FILE = 2;
     public static final int SIGN_INTENT_RETURN_CODE = 3;
@@ -58,6 +54,7 @@ public class MainActivity
 
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
+    private String mCurrentPhotoPath;
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -163,24 +160,16 @@ public class MainActivity
         }
         final CreatePaintingFragment fragment = (CreatePaintingFragment) getSupportFragmentManager().
                 findFragmentByTag(CreatePaintingFragment.TAG);
-        if (data.getData() != null) {
-            final String imageUri = data.getData().toString();
-
-            if (fragment != null) {
-                fragment.onImageChosen(imageUri);
-            }
+        final String imageUri;
+        if (requestCode == PICK_FROM_FILE) {
+            imageUri = data.getData().toString();
         } else {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
-            fragment.onImageChosen(getImageUri(photo).toString());
+            imageUri = mCurrentPhotoPath;
         }
 
-    }
-
-    public Uri getImageUri(Bitmap inImage) {
-        final ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
+        if (fragment != null && imageUri != null) {
+            fragment.onImageChosen(imageUri);
+        }
     }
 
     @Override
@@ -234,6 +223,7 @@ public class MainActivity
         final SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         MainApplication.getDataWrapper().setUsername(sp.getString(KEY_USERNAME, MainApplication.DEFAULT_USERNAME));
         NetworkConfiguration.resetIp(sp.getString(KEY_IP, NetworkConfiguration.DEFAULT_IP));
+        NetworkConfiguration.resetPort(sp.getString(KEY_PORT, NetworkConfiguration.DEFAULT_PORT));
     }
 
     private void saveSettings() {
@@ -241,6 +231,9 @@ public class MainActivity
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.edit().
                 putString(KEY_IP, NetworkConfiguration.SERVER_IP).
+                apply();
+        preferences.edit().
+                putString(KEY_PORT, NetworkConfiguration.SERVER_PORT).
                 apply();
         final String username = MainApplication.getDataWrapper().getUsername();
         if (!username.equals(MainApplication.DEFAULT_USERNAME)) {
@@ -345,5 +338,9 @@ public class MainActivity
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    public void setCameraImageUri(String mCurrentPhotoPath) {
+        this.mCurrentPhotoPath = mCurrentPhotoPath;
     }
 }

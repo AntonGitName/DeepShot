@@ -26,13 +26,16 @@
     <string name="chosen_image">chosen image</string>
     <string name="filter_list_header">Available styles</string>
     <string name="settings_button">Settings</string>
-    <string name="current_ip_text">Current server IP:</string>
+    <string name="current_ip_text">Server IP:</string>
     <string name="btn_clear_cache">Clear cache</string>
-    <string name="username">Current user:</string>
+    <string name="username">Username:</string>
     <string name="navigation_drawer_open">open</string>
     <string name="navigation_drawer_close">close</string>
-    <string name="change_server_text">Change server IP:</string>
-    <string name="btn_set_server">change</string>
+    <string name="change_server_text">New IP:</string>
+    <string name="change_server_port_text">New port:</string>
+    <string name="btn_set_server">change IP</string>
+    <string name="btn_set_server_port">change port</string>
     <string name="synchronize_button">Synchronize</string>
     <string name="empty_gallery">Your Gallery is empty</string>
+    <string name="current_port_text">Server port:</string>
 </resources>

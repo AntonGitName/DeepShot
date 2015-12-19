@@ -6,13 +6,21 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import ru.spbau.mit.antonpp.deepshot.MainActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
@@ -21,12 +29,40 @@ public class ImageChooseFragment extends DialogFragment {
 
     public static final String TAG = ImageChooseFragment.class.getName();
 
+    String mCurrentPhotoPath;
+
     public ImageChooseFragment() {
         // Required empty public constructor
     }
 
     public static ImageChooseFragment newInstance() {
         return new ImageChooseFragment();
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:/" + image.getAbsolutePath();
+        galleryAddPic();
+        return image;
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(mCurrentPhotoPath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        getActivity().sendBroadcast(mediaScanIntent);
     }
 
     @Override
@@ -47,7 +83,20 @@ public class ImageChooseFragment extends DialogFragment {
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     // Ensure that there's a camera activity to handle the intent
                     if (takePictureIntent.resolveActivity(activity.getPackageManager()) != null) {
-                        activity.startActivityForResult(takePictureIntent, MainActivity.PICK_FROM_CAMERA);
+                        // Create the File where the photo should go
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            Log.e(TAG, ex.getMessage());
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                    Uri.fromFile(photoFile));
+                            ((MainActivity) activity).setCameraImageUri(mCurrentPhotoPath);
+                            activity.startActivityForResult(takePictureIntent, MainActivity.PICK_FROM_CAMERA);
+                        }
                     }
                 } else {
                     Intent intent = new Intent();

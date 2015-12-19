@@ -24,8 +24,10 @@ public class SettingsFragment extends Fragment {
 
     public static final String TAG = SettingsFragment.class.getName();
 
-    private EditText editText;
+    private EditText editIpText;
+    private EditText editPortText;
     private TextView serverIp;
+    private TextView serverPort;
     private TextView username;
 
     public SettingsFragment() {
@@ -47,19 +49,31 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        editText = (EditText) rootView.findViewById(R.id.server_ip_edittext);
+        editIpText = (EditText) rootView.findViewById(R.id.server_ip_edittext);
+        editPortText = (EditText) rootView.findViewById(R.id.server_port_edittext);
         serverIp = (TextView) rootView.findViewById(R.id.text_server);
+        serverPort = (TextView) rootView.findViewById(R.id.text_server_port);
         username = (TextView) rootView.findViewById(R.id.text_username);
 
         updateUsername();
         updateServerIp();
 
-        rootView.findViewById(R.id.btn_set_server).setOnClickListener(new View.OnClickListener() {
+        rootView.findViewById(R.id.btn_set_server_ip).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newIP = editText.getText().toString();
+                String newIP = editIpText.getText().toString();
                 MainApplication.getDataWrapper().clearCache();
                 NetworkConfiguration.resetIp(newIP);
+                updateServerIp();
+            }
+        });
+
+        rootView.findViewById(R.id.btn_set_server_port).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String newPort = editPortText.getText().toString();
+                MainApplication.getDataWrapper().clearCache();
+                NetworkConfiguration.resetPort(newPort);
                 updateServerIp();
             }
         });
@@ -84,5 +98,6 @@ public class SettingsFragment extends Fragment {
 
     public void updateServerIp() {
         serverIp.setText(NetworkConfiguration.SERVER_IP);
+        serverPort.setText(NetworkConfiguration.SERVER_PORT);
     }
 }
