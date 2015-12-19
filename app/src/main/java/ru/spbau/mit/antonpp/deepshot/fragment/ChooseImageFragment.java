@@ -36,8 +36,8 @@ public class ChooseImageFragment extends Fragment {
         rootView.findViewById(R.id.create_choose_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final ImageChooseFragment imageChooseFragment = ImageChooseFragment.newInstance();
-                imageChooseFragment.show(getFragmentManager(), ImageChooseFragment.TAG);
+                final SelectImageFragment selectImageFragment = SelectImageFragment.newInstance();
+                selectImageFragment.show(getFragmentManager(), SelectImageFragment.TAG);
             }
         });
         imageView = (ImageView) rootView.findViewById(R.id.create_image_view);

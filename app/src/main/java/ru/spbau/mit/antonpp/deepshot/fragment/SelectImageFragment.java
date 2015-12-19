@@ -25,18 +25,18 @@ import java.util.Date;
 import ru.spbau.mit.antonpp.deepshot.MainActivity;
 import ru.spbau.mit.antonpp.deepshot.R;
 
-public class ImageChooseFragment extends DialogFragment {
+public class SelectImageFragment extends DialogFragment {
 
-    public static final String TAG = ImageChooseFragment.class.getName();
+    public static final String TAG = SelectImageFragment.class.getName();
 
     String mCurrentPhotoPath;
 
-    public ImageChooseFragment() {
+    public SelectImageFragment() {
         // Required empty public constructor
     }
 
-    public static ImageChooseFragment newInstance() {
-        return new ImageChooseFragment();
+    public static SelectImageFragment newInstance() {
+        return new SelectImageFragment();
     }
 
     private File createImageFile() throws IOException {
