@@ -49,7 +49,7 @@ public class MainActivity
     private static final String KEY_USERNAME = "KEY_USERNAME";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private BroadcastReceiver registrationBroadcastReceiver;
 
     private ActionBarDrawerToggle toggle;
     private NavigationView navigationView;
@@ -87,7 +87,7 @@ public class MainActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+        registrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 final SharedPreferences sharedPreferences =
@@ -181,13 +181,13 @@ public class MainActivity
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+        LocalBroadcastManager.getInstance(this).registerReceiver(registrationBroadcastReceiver,
                 new IntentFilter(Constants.REGISTRATION_COMPLETE));
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(registrationBroadcastReceiver);
         super.onPause();
     }
 
@@ -201,8 +201,7 @@ public class MainActivity
         final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.fragment_container, fragment, tag);
         if (!getCurrentFragmentTag().equals(tag)) {
-            // TODO
-//            ft.addToBackStack(tag);
+            ft.addToBackStack(tag);
         }
         ft.commit();
     }
