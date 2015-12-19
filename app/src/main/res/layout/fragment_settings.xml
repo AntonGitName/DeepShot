@@ -12,14 +12,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/username"
-            android:textColor="#000000"
+            android:textColor="@color/colorText"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/text_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
+            android:textColor="@color/colorText"
             android:textSize="16sp" />
 
     </TableRow>
@@ -33,14 +33,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/current_ip_text"
-            android:textColor="#000000"
+            android:textColor="@color/colorText"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/text_server"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
+            android:textColor="@color/colorText"
             android:textSize="16sp" />
 
     </TableRow>
@@ -54,14 +54,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change_server_text"
-            android:textColor="#000000"
+            android:textColor="@color/colorText"
             android:textSize="16sp" />
 
         <EditText
             android:id="@+id/server_ip_edittext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#000000"
+            android:textColor="@color/colorText"
             android:textSize="16sp" />
 
     </TableRow>
@@ -85,7 +85,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_set_server"
-            android:textColor="#000000"
             android:textSize="16sp" />
 
         <Button
@@ -93,7 +92,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_clear_cache"
-            android:textColor="#000000"
             android:textSize="16sp" />
     </TableRow>
 
