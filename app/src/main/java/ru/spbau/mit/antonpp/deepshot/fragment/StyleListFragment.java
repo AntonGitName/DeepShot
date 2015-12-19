@@ -20,6 +20,7 @@ import ru.spbau.mit.antonpp.deepshot.network.model.StyleItem;
  */
 public class StyleListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<StyleItem>> {
 
+    View previous;
     private FilterListAdapter adapter;
 
     @Override
@@ -47,6 +48,11 @@ public class StyleListFragment extends ListFragment implements LoaderManager.Loa
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
         ((MainActivity) getActivity()).onStyleChosen(adapter.getItem(position).getId());
+        if (previous != null) {
+            previous.setSelected(false);
+        }
+        v.setSelected(true);
+        previous = v;
     }
 
     @Override
