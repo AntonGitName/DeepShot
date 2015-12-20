@@ -2,7 +2,7 @@
 
 This repo is a part of the DeepShot project. It was created by two students ([AntonGitName](https://github.com/AntonGitName) and [Semionn](https://github.com/Semionn)) from St Petersburg Academic University.
 
-DeepShor project consists of:
+DeepShot project consists of:
  - [android client](https://github.com/AntonGitName/DeepShot)
  - [server](https://github.com/AntonGitName/DeepShotServer)
  - [standalone-app](https://github.com/Semionn/deep_style)
